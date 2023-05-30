@@ -1,0 +1,16 @@
+.optionLabel {
+    display: inline-block;
+    width: fit-content;
+    padding: 0 1rem;
+    color:white;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.optionContainer {
+    width: fit-content;
+    margin: 0 auto;
+    border: none;
+}

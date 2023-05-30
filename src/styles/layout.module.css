@@ -1,0 +1,29 @@
+.pageLayout {
+    max-width: 50vw;
+    margin: 0 auto;      
+}
+
+.leftTitle {
+    position: fixed;
+    top: 40vh;
+    left: 2rem;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+}
+
+.rightTitle {
+    position: fixed;
+    top: 32vh;
+    right: 2rem;
+    writing-mode: vertical-lr;
+}
+
+/* special treatment for the users with smaller screen  */
+@media screen and (max-width : 600px) {
+  
+    .pageLayout {
+      max-width: 90vw;
+      margin: 0 auto;
+    }
+  
+}

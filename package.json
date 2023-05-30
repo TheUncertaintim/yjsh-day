@@ -1,0 +1,23 @@
+{
+  "name": "imac",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@google-cloud/datastore": "^7.5.1",
+    "@google-cloud/storage": "^6.10.1",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.4",
+    "next": "13.4.4",
+    "photoswipe": "^5.3.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-photoswipe-gallery": "^2.2.7",
+    "swr": "^2.1.5"
+  }
+}
