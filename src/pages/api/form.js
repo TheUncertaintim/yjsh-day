@@ -8,31 +8,20 @@ export default async function formHandler(req, res) {
     return;
   }
 
-  const body = req.body;
-
-  //TODO: repalce the following with req.json();
-  let cardData = [];
-  for (const key in body) {
-    cardData.push({
-      name: key,
-      value: body[key],
-    });
-  }
-
+  const cardData = req.body;
   // TODO: server input validation here
   // if (...) {
   //   res.status(400).json({data: "Bad input"});
   //   return;
   // }
 
+  // upload msg to google cloud
   try {
-    // upload msg to google cloud
-    const cardKeyId = await addCard(cardData);
-    // finally, return ok
-    res.status(200).json({ data: cardKeyId });
+    const data = await addCard(cardData);
+    const apiResponse = data[0];
+    res.status(200).json({ data: apiResponse });
   } catch (err) {
     console.log("Failed to add new card data due to error:", err);
-    // finally, return ok
     res.status(400).json({ data: err });
   }
 }

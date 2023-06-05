@@ -1,16 +1,27 @@
 import { Storage } from "@google-cloud/storage";
 
 const storage = new Storage();
+const BUCKET_NAME = "imac-wedding-images";
 
-const bucketName = "imac-wedding-images";
-
-async function listImages() {
-  // Lists files in the bucket
-
-  return await storage.bucket(bucketName).getFiles();
+/** Generate a signed URL for uploading a given file to GCS */
+function generateUploadURL(fileName) {
+  const bucket = storage.bucket(BUCKET_NAME);
+  const file = bucket.file(fileName);
+  const options = {
+    expires: Date.now() + 1 * 60 * 1000, //  1 minute,
+  };
+  return file.generateSignedPostPolicyV4(options);
 }
 
-async function uploadImage(filePath, destFileName) {
+/** NOT IN USED */
+function listImages() {
+  // Lists files in the bucket
+
+  return storage.bucket(BUCKET_NAME).getFiles();
+}
+
+/** NOT IN USED */
+function uploadImage(filePath, destFileName) {
   const options = {
     destination: destFileName,
     // Optional:
@@ -23,27 +34,13 @@ async function uploadImage(filePath, destFileName) {
     preconditionOpts: { ifGenerationMatch: generationMatchPrecondition },
   };
 
-  await storage.bucket(bucketName).upload(filePath, options);
-  console.log(`${filePath} uploaded to ${bucketName}`);
+  return storage.bucket(BUCKET_NAME).upload(filePath, options);
 }
 
-async function downloadImage(fileName) {
+/** NOT IN USED */
+function downloadImage(fileName) {
   // Downloads the file into a buffer in memory.
-  const contents = await storage.bucket(bucketName).file(fileName).download();
-
-  console.log(
-    `Contents of gs://${bucketName}/${fileName} are ${contents.toString()}.`
-  );
-  return contents;
-}
-
-async function generateUploadURL(fileName) {
-  const bucket = storage.bucket(bucketName);
-  const file = bucket.file(fileName);
-  const options = {
-    expires: Date.now() + 1 * 60 * 1000, //  1 minute,
-  };
-  return file.generateSignedPostPolicyV4(options);
+  return storage.bucket(BUCKET_NAME).file(fileName).download();
 }
 
 export { generateUploadURL, listImages, uploadImage, downloadImage };

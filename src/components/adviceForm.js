@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import MessageEntry from "./messageEntry";
 
 import cardAdvice from "/public/images/advice_card_advice.png";
@@ -14,20 +14,14 @@ import { useSWRConfig } from "swr";
 export default function AdviceForm({ defaultMsg, editable }) {
   // the form state could be either typing, sending or sent
   const [formState, setFormState] = useState("typing");
-  const [error, setError] = useState(null);
-  const formRef = useRef(null);
   const { mutate } = useSWRConfig();
 
   function updateForm(state) {
     setFormState(state);
     // pull the forms again after user submitted a new form
-    if (state === "sent") {
-      mutate("/api/advices?entity=Card");
-    }
-  }
-
-  function updateError(error) {
-    setError(error);
+    // if (state === "sent") {
+    //   mutate("/api/advices?entity=Card");
+    // }
   }
 
   // message is represented as an instance
@@ -59,7 +53,6 @@ export default function AdviceForm({ defaultMsg, editable }) {
       return (
         <>
           <form
-            ref={formRef}
             className={dynamicStyle}
             style={{ backgroundImage: `url(${imagePath}` }}
           >
@@ -74,7 +67,7 @@ export default function AdviceForm({ defaultMsg, editable }) {
           {editable && (
             <button
               type="button"
-              onClick={(e) => handleSubmit(e, msg, updateForm, updateError)}
+              onClick={(e) => handleSubmit(e, msg, updateForm)}
               className={style.submitButton}
               disabled={isFieldEmpty}
             >
@@ -91,7 +84,12 @@ export default function AdviceForm({ defaultMsg, editable }) {
       return <label>Thank you for your advice!</label>;
     }
     case "error": {
-      return <label>{error}</label>;
+      return (
+        <label>
+          Oops...! Your message did not go through. Try the physical card
+          instead?
+        </label>
+      );
     }
   }
 }
@@ -114,7 +112,7 @@ function getImagePathByCategory(category) {
   }
 }
 
-async function handleSubmit(event, msgData, updateForm, updateError) {
+async function handleSubmit(event, msgData, updateForm) {
   // Stop the form from submitting and refreshing the page.
   event.preventDefault();
 
@@ -125,7 +123,7 @@ async function handleSubmit(event, msgData, updateForm, updateError) {
   const JSONdata = JSON.stringify(msgData);
 
   // API endpoint where we send form data.
-  const endpoint = "/api/form?entity=Card";
+  const endpoint = "/api/form";
 
   // Form the request for sending data to the server.
   const options = {
@@ -145,17 +143,12 @@ async function handleSubmit(event, msgData, updateForm, updateError) {
   // }
 
   updateForm("sending");
-  // Send the form data to our forms API on Vercel and get a response.
+  // Send the form data to our forms API and get a response.
   const response = await fetch(endpoint, options);
-  const result = await response.json();
-
   if (!response.ok) {
     updateForm("error");
-    updateError(
-      "Oops...! Your message did not go through. Try the physical card instead?"
-    );
-    return;
+  } else {
+    console.log(`Another message has been sent successfully!`);
+    updateForm("sent");
   }
-  const cardKeyId = result.data;
-  updateForm("sent");
 }
