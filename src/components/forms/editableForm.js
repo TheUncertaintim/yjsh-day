@@ -1,17 +1,11 @@
 import { useState } from "react";
-import MessageEntry from "./messageEntry";
-
-import cardAdvice from "/public/images/advice_card_advice.png";
-import cardPredict from "/public/images/advice_card_predict.png";
-import cardShare from "/public/images/advice_card_share.png";
-import cardSuggest from "/public/images/advice_card_suggest.png";
-import cardTell from "/public/images/advice_card_tell.png";
-
-import style from "../styles/adviceForm.module.css";
+import MessageEntry from "../messageEntry";
+import { getImagePathByCategory } from "./utils";
+import style from "../../styles/form.module.css";
 
 import { useSWRConfig } from "swr";
 
-export default function AdviceForm({ defaultMsg, editable }) {
+export default function EditableForm({ formCategory }) {
   // the form state could be either typing, sending or sent
   const [formState, setFormState] = useState("typing");
   const { mutate } = useSWRConfig();
@@ -19,19 +13,25 @@ export default function AdviceForm({ defaultMsg, editable }) {
   function updateForm(state) {
     setFormState(state);
     // pull the forms again after user submitted a new form
-    // if (state === "sent") {
-    //   mutate("/api/advices?entity=Card");
-    // }
+    if (state === "sent") {
+      mutate("/api/advices?entity=Card");
+    }
   }
 
   // message is represented as an instance
   // TODO: perhaps use FormData here instead?
-  const [msg, setMsg] = useState(defaultMsg);
+  const [msg, setMsg] = useState({
+    category: formCategory,
+  });
 
   function handleInput(msg) {
     // remove redundant field in "msg"
+    // so that the var "isFieldEmpty" works properly
     for (const key in msg) {
-      if (msg[key].length === 0) {
+      const entry = msg[key];
+      if (typeof entry === "string" && entry.length === 0) {
+        delete msg[key];
+      } else if (typeof entry === "boolean" && msg[key] === false) {
         delete msg[key];
       }
     }
@@ -40,13 +40,15 @@ export default function AdviceForm({ defaultMsg, editable }) {
   // the field is empty if there's only one key (category) in the "msg" instance
   const isFieldEmpty = Object.keys(msg).length === 1;
   // get the image of the interactive card that should be displayed
-  const imagePath = getImagePathByCategory(defaultMsg.category);
+  const imagePath = getImagePathByCategory(msg.category);
 
   // dynamic style
   let dynamicStyle = style.cardBase;
-  const customStyle =
-    msg.category === "Advice" ? style.adviceCard : style.otherCard;
-  dynamicStyle += " " + customStyle;
+  if (msg.category === "Advice") {
+    dynamicStyle += " " + style.adviceCard;
+  } else {
+    dynamicStyle += " " + style.otherCard;
+  }
 
   switch (formState) {
     case "typing": {
@@ -57,23 +59,16 @@ export default function AdviceForm({ defaultMsg, editable }) {
             style={{ backgroundImage: `url(${imagePath}` }}
           >
             <input name="category" value={`${msg.category}`} hidden readOnly />
-            <MessageEntry
-              key={msg.category}
-              msg={msg}
-              handleEntry={handleInput}
-              editable={editable}
-            />
+            <MessageEntry msg={msg} handleEntry={handleInput} editable={true} />
           </form>
-          {editable && (
-            <button
-              type="button"
-              onClick={(e) => handleSubmit(e, msg, updateForm)}
-              className={style.submitButton}
-              disabled={isFieldEmpty}
-            >
-              CLICK TO SUBMIT
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={(e) => handleSubmit(e, msg, updateForm)}
+            className={style.submitButton}
+            disabled={isFieldEmpty}
+          >
+            CLICK TO SUBMIT
+          </button>
         </>
       );
     }
@@ -91,24 +86,6 @@ export default function AdviceForm({ defaultMsg, editable }) {
         </label>
       );
     }
-  }
-}
-
-function getImagePathByCategory(category) {
-  switch (category) {
-    case "Advice":
-      return cardAdvice.src;
-    case "Suggest":
-      return cardSuggest.src;
-    case "Tell":
-      return cardTell.src;
-    case "Predict":
-      return cardPredict.src;
-    case "Share":
-      return cardShare.src;
-    default:
-      // TODO: throw an error here
-      return "";
   }
 }
 

@@ -1,7 +1,8 @@
 import style from "../styles/tellus.module.css";
 import { useState } from "react";
 import Layout from "../components/layout";
-import AdviceForm from "../components/adviceForm";
+import EditableForm from "@/components/forms/editableForm";
+import StaticForm from "@/components/forms/staticForm";
 import useSWR from "swr";
 
 export default function TellUs() {
@@ -40,19 +41,13 @@ export default function TellUs() {
           |
           <CardOption optionName="Predict" handleClick={handleClick} />
         </fieldset>
-        <AdviceForm
-          key={activeCard}
-          defaultMsg={{ category: activeCard }}
-          editable={true}
-        />
+        <EditableForm key={activeCard} formCategory={activeCard} />
         <div className="divider" />
         <p>Read more from our friends and family:</p>
       </section>
       {isLoading && <label>Loading other people's suggestions</label>}
       {data &&
-        data.map((advice, index) => (
-          <AdviceForm key={index} defaultMsg={advice} editable={false} />
-        ))}
+        data.map((advice, index) => <StaticForm key={index} msg={advice} />)}
     </Layout>
   );
 }
