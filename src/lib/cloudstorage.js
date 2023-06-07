@@ -10,6 +10,7 @@ function generateUploadURL(fileName) {
   const options = {
     expires: Date.now() + 1 * 60 * 1000, //  1 minute,
   };
+  console.log("generating signed url...");
   return file.generateSignedPostPolicyV4(options);
 }
 

@@ -28,6 +28,7 @@
 
 .neverText {
     grid-row: 3;
+    align-self: start;
 }
 
 .sometimesText {

@@ -6,10 +6,12 @@ export default async function adviceHandler(req, res) {
     res.status(500).end();
   }
   const entity = req.query.entity;
-  console.log(`A request to fetch all cards has been received!`);
+  console.log(
+    `A request to fetch cards of entity ${entity} has been received!`
+  );
   try {
     const [listOfCards] = await listCards(entity);
-    res.json(listOfCards);
+    res.status(200).json(listOfCards);
   } catch (error) {
     console.log(err);
     res.status(500).json({ err: error });

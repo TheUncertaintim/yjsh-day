@@ -45,7 +45,11 @@ export default function Photos() {
     fetcher
   );
 
+  if (error) {
+    console.error("Error loading photos...", error);
+  }
   const [fileSelected, setFileSelected] = useState(null);
+  const [formState, setFormState] = useState("");
   const inputRef = useRef(null);
 
   function handleInputSelection() {
@@ -53,8 +57,42 @@ export default function Photos() {
     if (currFiles.length === 0) {
       return;
     }
-    console.log("currFiles[0]:", currFiles[0]);
     setFileSelected(currFiles[0]);
+    setFormState("");
+  }
+
+  function updateFormState(formState) {
+    setFormState(formState);
+    if (formState === "uploaded") {
+      setFileSelected(null);
+    }
+  }
+
+  // display message to update user the status to the photo uploaded
+  let feedbackMsg = null;
+  switch (formState) {
+    case "uploading": {
+      feedbackMsg = <p>Uploading your photo...</p>;
+      break;
+    }
+    case "uploaded": {
+      feedbackMsg = (
+        <p>
+          Photo uploaded, thank you!
+          <br />
+          Come back later to view your photos!
+        </p>
+      );
+      break;
+    }
+    case "error": {
+      feedbackMsg = (
+        <p>
+          Oops... something went wrong! Guess Yu-Jeng got works to do now...
+        </p>
+      );
+      break;
+    }
   }
 
   return (
@@ -77,65 +115,39 @@ export default function Photos() {
               id="image-upload"
               ref={inputRef}
               type="file"
-              accept="image/*;capture=camera"
+              accept="image/*"
               onChange={handleInputSelection}
               className={style.filePicker}
             />
           </div>
           {fileSelected && (
-            <img
-              src={URL.createObjectURL(fileSelected)}
-              alt="selected image"
-              className={style.uploadedImage}
-            />
+            <>
+              <img
+                src={URL.createObjectURL(fileSelected)}
+                alt="image to upload"
+                className={style.uploadedImage}
+              />
+              <button
+                type="submit"
+                className={style.shareButton}
+                onClick={(e) => handleSubmit(e, fileSelected, updateFormState)}
+              >
+                Upload
+              </button>
+            </>
           )}
-          {fileSelected && (
-            <button
-              type="submit"
-              className={style.shareButton}
-              onClick={(e) => handleSubmit(e, fileSelected)}
-            >
-              Upload
-            </button>
-          )}
+          {feedbackMsg}
         </form>
         <div className="divider" />
         <h1>This day, through your eyes.</h1>
-        <PhotoCollection
-          galleryID="my-test-gallery"
-          images={[
-            {
-              originFile:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-2500.jpg",
-              thumbnail:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-200.jpg",
-              width: 1875,
-              height: 2500,
-            },
-            {
-              originFile:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg",
-              thumbnail:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg",
-              width: 1669,
-              height: 2500,
-            },
-            {
-              originFile:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg",
-              thumbnail:
-                "https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg",
-              width: 2500,
-              height: 1666,
-            },
-          ]}
-        />
+        {isLoading && <p>Fetching images...This might take a while...</p>}
+        {data && <PhotoCollection galleryID="my-test-gallery" images={data} />}
       </section>
     </Layout>
   );
 }
 
-async function handleSubmit(event, fileSelected) {
+async function handleSubmit(event, fileSelected, updateFormState) {
   // Stop the form from submitting and refreshing the page.
   event.preventDefault();
 
@@ -150,15 +162,28 @@ async function handleSubmit(event, fileSelected) {
   Object.entries(newInstance).forEach(([key, value]) => {
     formData.append(key, value);
   });
+
+  updateFormState("uploading");
   // Send the form data to our forms API on GCS and get a response.
-  const response = await fetch(url, { method: "POST", body: formData });
-  if (response.ok) {
-    console.log(
-      "Image ",
-      fileSelected.name,
-      " has been posted successfully to GCS!"
-    );
-  } else {
-    console.log("Failed to upload image to Google Cloud Storage");
+  try {
+    const response = await fetch(url, { method: "POST", body: formData });
+    if (response.ok) {
+      console.log(
+        "Image ",
+        fileSelected.name,
+        " has been posted successfully to GCS!"
+      );
+      updateFormState("uploaded");
+    } else {
+      const data = await response.json();
+      console.log(
+        "Failed to upload image to Google Cloud Storage. Error:",
+        data.err
+      );
+      updateFormState("error");
+    }
+  } catch (err) {
+    console.error(err);
+    updateFormState("error");
   }
 }

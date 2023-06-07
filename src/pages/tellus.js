@@ -45,7 +45,7 @@ export default function TellUs() {
         <div className="divider" />
         <p>Read more from our friends and family:</p>
       </section>
-      {isLoading && <label>Loading other people's suggestions</label>}
+      {isLoading && <label>Loading other people&apos;s suggestions</label>}
       {data &&
         data.map((advice, index) => <StaticForm key={index} msg={advice} />)}
     </Layout>

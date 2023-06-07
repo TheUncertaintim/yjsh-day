@@ -12,7 +12,6 @@ export default function MessageEntry({ msg, handleEntry, editable }) {
         handleEntry(newEntry);
       }
     : null;
-  // console.log("Always text:", msg["alwaysText"]);
   // TODO restrict input chars
   if (msg.category === "Advice") {
     return (
@@ -43,21 +42,21 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
   return (
     <>
       <TextInput
-        name="alwaysText"
+        name="_1_alwaysText"
         msg={msg}
         className={`${style.input} ${style.alwaysText}`}
         onInputChange={onInputChange}
         disabled={!editable}
       />
       <TextInput
-        name="neverText"
+        name="_2_neverText"
         msg={msg}
         className={`${style.input} ${style.neverText}`}
         onInputChange={onInputChange}
         disabled={!editable}
       />
       <TextInput
-        name="sometimesText"
+        name="_3_sometimesText"
         msg={msg}
         className={`${style.input} ${style.sometimesText}`}
         onInputChange={onInputChange}
@@ -66,7 +65,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
       <div className={style.checkBoxes}>
         <div className={style.jokingOption}>
           <CheckBoxInput
-            name="jokingBox"
+            name="_4_jokingBox"
             msg={msg}
             onInputChange={onInputChange}
             disabled={!editable}
@@ -74,7 +73,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         </div>
         <div className={style.trustMeOption}>
           <CheckBoxInput
-            name="trustMeBox"
+            name="_5_trustMeBox"
             msg={msg}
             onInputChange={onInputChange}
             disabled={!editable}
@@ -82,13 +81,13 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         </div>
         <div className={style.blankOption}>
           <CheckBoxInput
-            name="blankBox"
+            name="_6_blankBox"
             msg={msg}
             onInputChange={onInputChange}
             disabled={!editable}
           />
           <TextInput
-            name="blankInput"
+            name="_7_blankInput"
             msg={msg}
             className={`${style.input} ${style.blankInput}`}
             onInputChange={onInputChange}
@@ -97,7 +96,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         </div>
       </div>
       <TextInput
-        name="signedBy"
+        name="_8_signedBy"
         msg={msg}
         className={`${style.input} ${style.signedByText}`}
         onInputChange={onInputChange}
@@ -127,7 +126,7 @@ function CheckBoxInput({ name, msg, onInputChange, className, disabled }) {
     <input
       type="checkbox"
       name={name}
-      value={msg[name] ?? false}
+      checked={msg[name] ?? false}
       {...(onInputChange && {
         onChange: (e) => onInputChange({ [name]: e.target.checked }),
       })}
@@ -145,10 +144,10 @@ function TextAreaEntry({ msg, style, onInputChange = null, editable }) {
   return (
     <textarea
       name="message"
-      value={msg["adviceTextarea"] ?? ""}
+      value={msg["textArea"] ?? ""}
       placeholder="Long story short..."
       {...(onInputChange && {
-        onChange: (e) => onInputChange({ adviceTextarea: e.target.value }),
+        onChange: (e) => onInputChange({ textArea: e.target.value }),
       })}
       className={style.formTextArea}
       disabled={!editable}
