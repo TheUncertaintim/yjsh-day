@@ -15,6 +15,10 @@ if (typeof window !== "undefined") {
   console.log("Done setting up canvas font and style");
 }
 
+// constants
+const DASH_LENGTH = 220;
+const SPEED = 2;
+
 export default function Animate() {
   // referencing the canvas
   const ref = useRef();
@@ -32,142 +36,151 @@ export default function Animate() {
   // render 2d graphics upon mounting
   useEffect(() => {
     const ctx = ref.current.getContext("2d");
+    ctx.font = "40px gochi_handregular";
 
+    var animationReq;
     if (!data) {
-      ctx.fillText("Loading next advice...", 100, 300);
-      console.log("Loading...");
+      ctx.fillText("Loading next advice...", 180, 280);
+    } else if (data.length == 0) {
+      ctx.fillText("Oops! Nothing to animate...", 180, 280);
     } else {
-      let msg = data[cardIdx];
-      const backgroundImage = new Image();
-      backgroundImage.src = getImagePathByCategory(msg.category);
-      backgroundImage.onload = () => {
-        console.log("Animating...");
-        // display card image
-        ctx.drawImage(backgroundImage, 0, 0);
-        // callback to fetch next message
-        const handleNext = () => {
-          // delay calling the next card for 5 seconds
-          setTimeout(() => {
-            if (cardIdx < data.length - 1) {
-              console.log("Currently at card ... ", cardIdx);
-              setCardIdx(cardIdx + 1);
-            } else {
-              // refresh all the cards
-              mutate("/api/advices?entity=Card");
-              // give it a bit time to fetch data
-              setTimeout(() => setCardIdx(0), 5000);
-            }
-          }, 5000);
-        };
-
-        // sort the entryies so that it's printed in the correct order
-        const sortedMsg = Object.keys(msg)
-          .sort()
-          .reduce((obj, key) => {
-            obj[key] = msg[key];
-            return obj;
-          }, {});
-
-        animateMessages(ctx, sortedMsg, handleNext);
-      };
+      ctx.font = "20px gochi_handregular";
+      const msg = data[cardIdx];
+      setup(ctx, msg, animationReq, handleNext);
     }
 
     // clean up
-    return () => ctx.clearRect(0, 0, innerWidth, innerHeight);
+    return () => {
+      if (animationReq) {
+        console.log("cancelling animation request");
+        cancelAnimationFrame(animationReq);
+      }
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+    };
   }, [cardIdx, data]);
 
-  let y = 90;
+  function handleNext() {
+    // start from the beginning if it's the last advice
+    if (cardIdx < data.length - 1) {
+      console.log("Displaying card #", cardIdx);
+      setCardIdx(cardIdx + 1);
+    } else {
+      console.log("Reaching the last card. Starting over again.");
+      setCardIdx(0);
+    }
+  }
+
   return (
     <canvas ref={ref} width={800} height={571} className={style.canvas}>
-      {/* TODO: Add fallback content here */}
+      {/* TODO: Add fallback content  here */}
     </canvas>
   );
 }
 
-function animateMessages(ctx, msg, handleNext) {
-  const positions = getTextPositionByCategory(msg.category);
+function setup(ctx, msg, animationReq, handleNext) {
+  const backgroundImage = new Image();
+  backgroundImage.src = getImagePathByCategory(msg.category);
+  backgroundImage.onload = () => {
+    // display card image
+    ctx.drawImage(backgroundImage, 0, 0);
+    // get printable entry strings
+    const entries = filterPrintableEntries(msg);
 
-  let printableEntries = Object.entries(msg);
-  printableEntries = printableEntries.filter(([key, value]) =>
-    Object.hasOwn(positions, key)
-  );
-  console.log(printableEntries);
-  const entryGenerator = function* () {
-    yield* printableEntries;
-  };
-  const gen = entryGenerator();
-
-  // schedule callback within callbacks
-  const run = () => {
-    let result = gen.next();
-    if (!result.done) {
-      let [key, text] = result.value;
-
-      // special treatment for the boolean boxes
-      if (typeof text == "boolean") {
-        text = text ? "✔" : " ";
+    const entryGenerator = function* () {
+      yield* entries;
+    };
+    const gen = entryGenerator();
+    let result;
+    let previousTimeStamp;
+    let checkInputRequired = true;
+    let position, text, i, dashOffset, x, y;
+    let resumeTime = -1;
+    function animate(timestamp) {
+      // normalizing speed of animation
+      if (previousTimeStamp == null) {
+        previousTimeStamp = timestamp;
       }
-      // animate only the printable fields
-      if (Object.hasOwn(positions, key)) {
-        const position = positions[key];
-        console.log("Animating", text, "at position", position);
-        animate(ctx, text, position, run);
+      const delta = timestamp - previousTimeStamp;
+      const speed = SPEED * delta;
+      previousTimeStamp = timestamp;
+
+      // run once per text (e.g. "Hello there")
+      if (checkInputRequired) {
+        if (resumeTime === -1) {
+          // add random delay
+          resumeTime = timestamp + Math.random() * 2000 + 1;
+        }
+        if (timestamp < resumeTime) {
+          requestAnimationFrame(animate);
+          return;
+        } else {
+          resumeTime = -1;
+        }
+
+        checkInputRequired = false;
+        // fetch next string
+        result = gen.next();
+        if (result.done) {
+          // no more text to animate
+          cancelAnimationFrame(animationReq);
+          // display the next one (if any)
+          setTimeout(handleNext, 5000);
+          return;
+        }
+        // animation text
+        [position, text] = result.value;
+        [x, y] = position;
+        // initialize variable
+        dashOffset = DASH_LENGTH;
+        i = 0;
+      }
+
+      // create a long dash mask
+      ctx.setLineDash([DASH_LENGTH - dashOffset, dashOffset - speed]);
+      ctx.strokeText(text[i], x, y); // stroke letter
+      dashOffset -= speed; // reduce dash length
+
+      if (dashOffset > 0) {
+        animationReq = requestAnimationFrame(animate); // animate
       } else {
-        console.error(
-          `Found not registered key ${key}. This should not happen!`
-        );
-      }
-    } else {
-      // done animating all the texts
-      console.log("Calling next message");
-      handleNext();
-    }
-  };
+        ctx.fillText(text[i], x, y); // fill final letter
+        dashOffset = DASH_LENGTH; // prep next char
+        // update cursor position
+        const cursorMovement =
+          ctx.measureText(text[i++]).width + ctx.lineWidth * Math.random();
+        x += cursorMovement;
 
-  run();
+        if (i >= text.length) {
+          checkInputRequired = true;
+        }
+        animationReq = requestAnimationFrame(animate);
+      }
+    }
+    requestAnimationFrame(animate);
+  };
 }
 
-function animate(ctx, text, position, callBack) {
-  const dashLen = 220;
-  const speed = 0.8;
-  let dashOffset = dashLen;
-  let i = 0;
-  let [x, y] = position;
-  let previousTimeStamp;
+function filterPrintableEntries(msg) {
+  const positions = getTextPositionByCategory(msg.category);
+  // sort the entryies so that it's printed in the correct order
+  const sortedEntries = Object.entries(msg).sort(([key1, v1], [key2, v2]) =>
+    key1 > key2 ? 1 : key1 === key2 ? 0 : -1
+  );
+  // filter the entries so that only printables remain
+  const filteredEntries = sortedEntries.filter(([key, _]) =>
+    Object.hasOwn(positions, key)
+  );
+  // replace the boolean variables with a tick (or no tick)
+  return filteredEntries.map(([key, value]) => {
+    const position = positions[key];
 
-  let animationReq;
-
-  function loop(timestamp) {
-    if (previousTimeStamp == null) {
-      previousTimeStamp = timestamp;
-    }
-    // normalizing speed of animation
-    const delta = timestamp - previousTimeStamp;
-    const speedNormalized = speed * delta;
-    previousTimeStamp = timestamp;
-
-    ctx.setLineDash([dashLen - dashOffset, dashOffset - speedNormalized]); // create a long dash mask
-    dashOffset -= speedNormalized; // reduce dash length
-    ctx.strokeText(text[i], x, y); // stroke letter
-
-    if (dashOffset > 0) {
-      animationReq = window.requestAnimationFrame(loop); // animate
+    if (typeof value === "boolean") {
+      return value ? [position, "✔"] : [position, " "];
     } else {
-      ctx.fillText(text[i], x, y); // fill final letter
-      dashOffset = dashLen; // prep next char
-      x += ctx.measureText(text[i++]).width + ctx.lineWidth * Math.random() + 2;
-      // ctx.setTransform(1, 0, 0, 1, 0, 3 * Math.random()); // random y-delta
-      // ctx.rotate(Math.random() * 0.005); // random rotation
-      if (i < text.length) {
-        animationReq = window.requestAnimationFrame(loop);
-      } else {
-        window.cancelAnimationFrame(animationReq);
-        callBack();
-      }
+      // original value
+      return [position, value];
     }
-  }
-
-  requestAnimationFrame(loop);
+  });
 }
 
 function getTextPositionByCategory(category) {
@@ -177,9 +190,9 @@ function getTextPositionByCategory(category) {
         _1_alwaysText: [200, 220],
         _2_neverText: [200, 280],
         _3_sometimesText: [200, 340],
-        _4_jokingBox: [140, 450],
-        _5_trustMeBox: [340, 450],
-        _6_blankBox: [540, 450],
+        _4_jokingBox: [90, 445],
+        _5_trustMeBox: [320, 445],
+        _6_blankBox: [540, 445],
         _7_blankInput: [590, 450],
         _8_signedBy: [610, 510],
       };
