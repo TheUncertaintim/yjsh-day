@@ -1,8 +1,8 @@
-import { getImagePathByCategory } from "@/components/forms/utils";
+import { getAnimationBackgroundByCategory } from "@/components/forms/utils";
 
 // TODO: magin number!!!
-const TEXT_AREA_WIDTH = 33;
-const LINE_HEIGHT = 25;
+const TEXT_AREA_WIDTH = 35;
+const LINE_HEIGHT = 50;
 
 export default class DisplayableCard {
   // field declaration for animation use
@@ -33,7 +33,7 @@ export default class DisplayableCard {
   }
 
   display() {
-    this.ctx.font = "20px gochi_handregular";
+    this.ctx.font = "40px gochi_handregular";
 
     this.backgroundImage.onload = () => {
       // display card image
@@ -47,8 +47,9 @@ export default class DisplayableCard {
 
   /** load background image */
   loadBackground() {
+    const category = this.msg.category;
     // load background image, this would trigger onload()
-    this.backgroundImage.src = getImagePathByCategory(this.msg.category);
+    this.backgroundImage.src = getAnimationBackgroundByCategory(category);
   }
 
   animate() {
@@ -231,20 +232,20 @@ export default class DisplayableCard {
     switch (category) {
       case "Advice":
         return {
-          _1_alwaysText: [200, 220],
-          _2_neverText: [200, 280],
-          _3_sometimesText: [200, 340],
-          _4_jokingBox: [90, 445],
-          _5_trustMeBox: [320, 445],
-          _6_blankBox: [540, 445],
-          _7_blankInput: [590, 450],
-          _8_signedBy: [610, 510],
+          _1_alwaysText: [437, 477.4],
+          _2_neverText: [437, 607.6],
+          _3_sometimesText: [437, 737.8],
+          _4_jokingBox: [196.65, 965.65],
+          _5_trustMeBox: [699.2, 965.65],
+          _6_blankBox: [1179.9, 965.65],
+          _7_blankInput: [1289.15, 976.5],
+          _8_signedBy: [1332.85, 1126.7],
         };
 
       default:
         // category "tell", "suggest", "predict" and "share" fall here
         return {
-          textArea: [420, 150],
+          textArea: [917.7, 325.74],
         };
     }
   }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import DisplayableCard from "@/components/DisplayableCard";
+import { getAnimationBackgroundByCategory } from "@/components/forms/utils";
 import useSWR, { mutate } from "swr";
 
 import style from "../styles/animate.module.css";
@@ -73,8 +74,8 @@ export default function Animate() {
   }, [cardIdx, data]);
 
   return (
-    <canvas ref={ref} width={800} height={571} className={style.canvas}>
-      {/* TODO: Add fallback content  here */}
+    <canvas ref={ref} width={1748} height={1240} className={style.canvas}>
+      Animating marriage advice being written down by hand.
     </canvas>
   );
 }
