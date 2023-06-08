@@ -45,6 +45,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         name="_1_alwaysText"
         msg={msg}
         maxLength="70"
+        placeholder="...water your plant?"
         className={`${style.input} ${style.alwaysText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -53,6 +54,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         name="_2_neverText"
         msg={msg}
         maxLength="70"
+        placeholder="...sleepwalking?"
         className={`${style.input} ${style.neverText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -61,6 +63,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         name="_3_sometimesText"
         msg={msg}
         maxLength="70"
+        placeholder="...find your ME time?"
         className={`${style.input} ${style.sometimesText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -82,22 +85,21 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
             disabled={!editable}
           />
         </div>
-        <div className={style.blankOption}>
-          <CheckBoxInput
-            name="_6_blankBox"
-            msg={msg}
-            onInputChange={onInputChange}
-            disabled={!editable}
-          />
-          <TextInput
-            name="_7_blankInput"
-            msg={msg}
-            maxLength="15"
-            className={`${style.input} ${style.blankInput}`}
-            onInputChange={onInputChange}
-            disabled={!editable}
-          />
-        </div>
+        <CheckBoxInput
+          name="_6_blankBox"
+          msg={msg}
+          onInputChange={onInputChange}
+          disabled={!editable}
+        />
+        <TextInput
+          name="_7_blankInput"
+          msg={msg}
+          maxLength="15"
+          placeholder="...or?"
+          className={`${style.input} ${style.blankInput}`}
+          onInputChange={onInputChange}
+          disabled={!editable}
+        />
       </div>
       <TextInput
         name="_8_signedBy"
@@ -111,25 +113,19 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
   );
 }
 
-function TextInput({
-  name,
-  msg,
-  maxLength,
-  onInputChange,
-  className,
-  disabled,
-}) {
+function TextInput(prop) {
   return (
     <input
       type="text"
-      name={name}
-      value={msg[name] ?? ""}
-      maxLength={maxLength}
-      {...(onInputChange && {
-        onChange: (e) => onInputChange({ [name]: e.target.value }),
+      name={prop.name}
+      value={prop.msg[prop.name] ?? ""}
+      placeholder={prop.placeholder}
+      maxLength={prop.maxLength}
+      {...(prop.onInputChange && {
+        onChange: (e) => prop.onInputChange({ [prop.name]: e.target.value }),
       })}
-      className={className}
-      disabled={disabled}
+      className={prop.className}
+      disabled={prop.disabled}
     />
   );
 }

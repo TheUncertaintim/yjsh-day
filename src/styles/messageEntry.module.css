@@ -8,14 +8,14 @@
     padding: 0.5em;
     margin-left: 10%; 
     color:#8C0303;
-    font: 1em "gochi_handregular", cursive, sans-serif;
+    font: 1.2em "gochi_handregular", cursive, sans-serif;
 }
 
 .input {
     margin-left: 16%;
     align-self : center;
     color:#8C0303;
-    font: 1em "gochi_handregular", cursive, sans-serif;
+    font: 1.2em "gochi_handregular", cursive, sans-serif;
 
     grid-column: 2;
     border: none;
@@ -58,8 +58,9 @@
 }
 
 .blankInput {
-    margin-left: 5px;
-    width: 6em;
+    margin: 0 0 0 2px;
+    padding-left: 0.5em;
+    max-width: 25%;
 }
 
 .signedByText {
@@ -70,7 +71,6 @@
     margin-left: 83%;
     width: 17%
 }
-
 
 @media screen and (max-width : 600px) {
 
@@ -83,5 +83,4 @@
         font: 1em "gochi_handregular", cursive, sans-serif;
 
     }
-  
-  }
+}

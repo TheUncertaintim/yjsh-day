@@ -56,7 +56,9 @@ export default function Animate() {
         setCardIdx(cardIdx + 1);
       } else {
         console.log("Reaching the last card. Starting over again.");
-        setCardIdx(0);
+        // pull the changes again and start from the first
+        mutate("/api/advices?entity=Card");
+        setTimeout(() => setCardIdx(0), 1000);
       }
     }
 
