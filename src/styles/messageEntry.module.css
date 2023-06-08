@@ -6,6 +6,7 @@
     border: none;
     resize: none;
     padding: 0.5em;
+    margin-left: 10%; 
     color:#8C0303;
     font: 1em "gochi_handregular", cursive, sans-serif;
 }
@@ -58,7 +59,7 @@
 
 .blankInput {
     margin-left: 5px;
-    width: 5em;
+    width: 6em;
 }
 
 .signedByText {

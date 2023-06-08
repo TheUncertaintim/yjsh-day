@@ -44,6 +44,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
       <TextInput
         name="_1_alwaysText"
         msg={msg}
+        maxLength="70"
         className={`${style.input} ${style.alwaysText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -51,6 +52,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
       <TextInput
         name="_2_neverText"
         msg={msg}
+        maxLength="70"
         className={`${style.input} ${style.neverText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -58,6 +60,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
       <TextInput
         name="_3_sometimesText"
         msg={msg}
+        maxLength="70"
         className={`${style.input} ${style.sometimesText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -89,6 +92,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
           <TextInput
             name="_7_blankInput"
             msg={msg}
+            maxLength="15"
             className={`${style.input} ${style.blankInput}`}
             onInputChange={onInputChange}
             disabled={!editable}
@@ -98,6 +102,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
       <TextInput
         name="_8_signedBy"
         msg={msg}
+        maxLength="15"
         className={`${style.input} ${style.signedByText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -106,12 +111,20 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
   );
 }
 
-function TextInput({ name, msg, onInputChange, className, disabled }) {
+function TextInput({
+  name,
+  msg,
+  maxLength,
+  onInputChange,
+  className,
+  disabled,
+}) {
   return (
     <input
       type="text"
       name={name}
       value={msg[name] ?? ""}
+      maxLength={maxLength}
       {...(onInputChange && {
         onChange: (e) => onInputChange({ [name]: e.target.value }),
       })}
@@ -146,6 +159,7 @@ function TextAreaEntry({ msg, style, onInputChange = null, editable }) {
       name="message"
       value={msg["textArea"] ?? ""}
       placeholder="Long story short..."
+      maxLength="350"
       {...(onInputChange && {
         onChange: (e) => onInputChange({ textArea: e.target.value }),
       })}

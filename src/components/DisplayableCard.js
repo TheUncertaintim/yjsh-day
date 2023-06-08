@@ -1,5 +1,9 @@
 import { getImagePathByCategory } from "@/components/forms/utils";
 
+// TODO: magin number!!!
+const TEXT_AREA_WIDTH = 33;
+const LINE_HEIGHT = 25;
+
 export default class DisplayableCard {
   // field declaration for animation use
   // to be moved elsewhere later
@@ -49,8 +53,9 @@ export default class DisplayableCard {
 
   animate() {
     const entries = this.filterPrintableEntries(this.msg);
+    const entryPositionPair = this.mapEntryPosition(this.msg, entries);
     const entryGenerator = function* () {
-      yield* entries;
+      yield* entryPositionPair;
     };
     this.gen = entryGenerator();
 
@@ -134,7 +139,7 @@ export default class DisplayableCard {
   isOnPause(timestamp) {
     if (this.resumeTime === -1) {
       // add random 0 ~ 2 sec delay
-      this.resumeTime = timestamp + Math.random() * 2000 + 1;
+      this.resumeTime = timestamp + Math.random() * 1000 + 1;
     }
     if (timestamp < this.resumeTime) {
       return true;
@@ -154,21 +159,71 @@ export default class DisplayableCard {
     const sortedEntries = Object.entries(msg).sort(([key1, v1], [key2, v2]) =>
       key1 > key2 ? 1 : key1 === key2 ? 0 : -1
     );
-    // filter the entries so that only printables remain
-    const filteredEntries = sortedEntries.filter(([key, _]) =>
-      Object.hasOwn(positions, key)
-    );
-    // replace the boolean variables with a tick (or no tick)
-    return filteredEntries.map(([key, value]) => {
-      const position = positions[key];
+    // filter the entries so that only the printables (have valid positions) remain
+    return sortedEntries.filter(([key, _]) => Object.hasOwn(positions, key));
+  }
 
-      if (typeof value === "boolean") {
+  mapEntryPosition(msg, entries) {
+    const textAreaLabel = "textArea";
+    // map entry to positions
+    const positions = this.getTextPositionByCategory(msg.category);
+    // map entries to their respective positions
+    const mappedEntries = entries.map(([key, value]) => {
+      const position = positions[key];
+      if (key == textAreaLabel) {
+        // don't alter value here, need special treatment later
+        return [key, value];
+      } else if (typeof value === "boolean") {
+        // replace the boolean variables with a tick (or no tick)
         return value ? [position, "✔"] : [position, " "];
       } else {
-        // original value
+        // mapped position to text
         return [position, value];
       }
     });
+
+    // find the text area
+    const textAreaText = mappedEntries.find(
+      ([key, value]) => key == textAreaLabel
+    );
+    if (textAreaText) {
+      const sections = [];
+      const paragraphs = textAreaText[1].split(/\n+/);
+      for (const paragraph of paragraphs) {
+        sections.push(this.paragraphToLines(paragraph));
+      }
+      let [xPos, yPos] = positions[textAreaLabel];
+      // remove the original text area entry
+      mappedEntries.shift();
+      for (const paragraph of sections) {
+        for (const line of paragraph) {
+          const linePos = [xPos, yPos];
+          mappedEntries.push([linePos, line]);
+          yPos += LINE_HEIGHT;
+        }
+        // meant to be double new line
+        yPos += LINE_HEIGHT;
+      }
+    }
+
+    return mappedEntries;
+  }
+
+  paragraphToLines(paragraph) {
+    const words = paragraph.split(/\s+/);
+    let lines = [];
+    let line = "";
+    for (const word of words) {
+      if (word.length + line.length > TEXT_AREA_WIDTH) {
+        lines.push(line.trim());
+        line = word;
+      } else {
+        line += " " + word;
+      }
+    }
+    // append the last line
+    lines.push(line.trim());
+    return lines;
   }
 
   /**Hard-coded positional value to for displaying text at particular position on the card */
@@ -189,7 +244,7 @@ export default class DisplayableCard {
       default:
         // category "tell", "suggest", "predict" and "share" fall here
         return {
-          textArea: [450, 150],
+          textArea: [420, 150],
         };
     }
   }
