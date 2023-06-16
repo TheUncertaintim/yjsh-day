@@ -1,45 +1,59 @@
-import cardAdvice from "/public/images/advice_card_advice.png";
-import cardPredict from "/public/images/advice_card_predict.png";
-import cardShare from "/public/images/advice_card_share.png";
-import cardSuggest from "/public/images/advice_card_suggest.png";
-import cardTell from "/public/images/advice_card_tell.png";
+import webAdvice_en from "/public/images/web_advice_EN.png";
+import webPredict_en from "/public/images/web_predict_EN.png";
+import webShare_en from "/public/images/web_share_EN.png";
+import webSuggest_en from "/public/images/web_suggest_EN.png";
+import webTell_en from "/public/images/web_tell_EN.png";
 
-import animateCardAdvice from "/public/images/animate_advice EN.png";
-import animateCardPredict from "/public/images/animate_Predict EN.png";
-import animateCardShare from "/public/images/animate_Share EN.png";
-import animateCardSuggest from "/public/images/animate_Suggest EN.png";
-import animateCardTell from "/public/images/animate_Tell EN.png";
+import webAdvice_ch from "/public/images/web_advice_CH.png";
+import webPredict_ch from "/public/images/web_predict_CH.png";
+import webShare_ch from "/public/images/web_share_CH.png";
+import webSuggest_ch from "/public/images/web_suggest_CH.png";
+import webTell_ch from "/public/images/web_tell_CH.png";
 
-export function getImagePathByCategory(category) {
+import animateAdvice_en from "/public/images/animate_advice_EN.png";
+import animatePredict_en from "/public/images/animate_predict_EN.png";
+import animateShare_en from "/public/images/animate_share_EN.png";
+import animateSuggest_en from "/public/images/animate_suggest_EN.png";
+import animateTell_en from "/public/images/animate_tell_EN.png";
+
+import animateAdvice_ch from "/public/images/animate_advice_CH.png";
+import animatePredict_ch from "/public/images/animate_predict_CH.png";
+import animateShare_ch from "/public/images/animate_share_CH.png";
+import animateSuggest_ch from "/public/images/animate_suggest_CH.png";
+import animateTell_ch from "/public/images/animate_tell_CH.png";
+
+/** return the english version by default */
+export function getImagePathByCategory(category, lang) {
   switch (category) {
     case "Advice":
-      return cardAdvice.src;
+      return lang === "ch" ? webAdvice_ch.src : webAdvice_en.src;
     case "Suggest":
-      return cardSuggest.src;
+      return lang === "ch" ? webSuggest_ch.src : webSuggest_en.src;
     case "Tell":
-      return cardTell.src;
+      return lang === "ch" ? webTell_ch.src : webTell_en.src;
     case "Predict":
-      return cardPredict.src;
+      return lang === "ch" ? webPredict_ch.src : webPredict_en.src;
     case "Share":
-      return cardShare.src;
+      return lang === "ch" ? webShare_ch.src : webShare_en.src;
     default:
       // TODO: throw an error here
       return "";
   }
 }
 
-export function getAnimationBackgroundByCategory(category) {
+/** return the english version by default */
+export function getAnimationBackgroundByCategory(category, lang) {
   switch (category) {
     case "Advice":
-      return animateCardAdvice.src;
+      return lang === "ch" ? animateAdvice_ch.src : animateAdvice_en.src;
     case "Suggest":
-      return animateCardSuggest.src;
+      return lang === "ch" ? animateSuggest_ch.src : animateSuggest_en.src;
     case "Tell":
-      return animateCardTell.src;
+      return lang === "ch" ? animateTell_ch.src : animateTell_en.src;
     case "Predict":
-      return animateCardPredict.src;
+      return lang === "ch" ? animatePredict_ch.src : animatePredict_en.src;
     case "Share":
-      return animateCardShare.src;
+      return lang === "ch" ? animateShare_ch.src : animateShare_en.src;
     default:
       // TODO: throw an error here
       return "";

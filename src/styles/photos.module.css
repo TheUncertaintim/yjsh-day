@@ -36,7 +36,7 @@
 .photoContainer {
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-evenly; */
+    justify-content: center;
     align-items: center;
     gap: 5px;
     max-width: 100%;

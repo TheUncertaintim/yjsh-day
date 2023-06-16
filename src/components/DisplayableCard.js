@@ -33,8 +33,6 @@ export default class DisplayableCard {
   }
 
   display() {
-    this.ctx.font = "40px gochi_handregular";
-
     this.backgroundImage.onload = () => {
       // display card image
       this.ctx.drawImage(this.backgroundImage, 0, 0);
@@ -47,9 +45,9 @@ export default class DisplayableCard {
 
   /** load background image */
   loadBackground() {
-    const category = this.msg.category;
+    const { category, lang } = this.msg;
     // load background image, this would trigger onload()
-    this.backgroundImage.src = getAnimationBackgroundByCategory(category);
+    this.backgroundImage.src = getAnimationBackgroundByCategory(category, lang);
   }
 
   animate() {
@@ -101,8 +99,7 @@ export default class DisplayableCard {
       this.ctx.fillText(this.text[this.i], this.x, this.y); // fill final letter
       this.dashOffset = this.DASH_LENGTH; // prep next char
       // update cursor position
-      this.x +=
-        this.ctx.measureText(this.text[this.i++]).width + Math.random() * 2;
+      this.x += this.ctx.measureText(this.text[this.i++]).width;
 
       if (this.i >= this.text.length) {
         this.checkInputRequired = true;

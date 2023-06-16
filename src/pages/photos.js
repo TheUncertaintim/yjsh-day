@@ -72,25 +72,21 @@ export default function Photos() {
   let feedbackMsg = null;
   switch (formState) {
     case "uploading": {
-      feedbackMsg = <p>Uploading your photo...</p>;
+      feedbackMsg = <p>照片上傳中...</p>;
       break;
     }
     case "uploaded": {
       feedbackMsg = (
         <p>
-          Photo uploaded, thank you!
+          上傳完成！謝謝！
           <br />
-          Come back later to view your photos!
+          照片正在雲端處理中，請稍後再回來看照片哦！
         </p>
       );
       break;
     }
     case "error": {
-      feedbackMsg = (
-        <p>
-          Oops... something went wrong! Guess Yu-Jeng got works to do now...
-        </p>
-      );
+      feedbackMsg = <p>噢...請告訴育仁他的網站壞了的樣子！</p>;
       break;
     }
   }
@@ -98,18 +94,14 @@ export default function Photos() {
   return (
     <Layout>
       <section>
+        <p>育仁沒有IG，所以我 (曉惠) 沒辦法請你在IG上標記我們。</p>
         <p>
-          Yu-Jeng doesn’t have Instagram, therefore there is no “Wedding
-          Hashtag”, so I (Shao Hui) can’t ask you to tag us on Instagram.
-        </p>
-        <p>
-          INSTEAD! Share with us your perspective of the day - Photos of you,
-          photos of us, memories of this day to last a lifetime.
+          但沒關係！請跟我們分享一張你今天拍的照片，讓這些回憶可以永遠保存。
         </p>
         <form className={style.shareImageform}>
           <div>
             <label htmlFor="image-upload" className={style.filePickerLabel}>
-              SELECT A PHOTO
+              上傳照片
             </label>
             <input
               id="image-upload"
@@ -132,15 +124,15 @@ export default function Photos() {
                 className={style.shareButton}
                 onClick={(e) => handleSubmit(e, fileSelected, updateFormState)}
               >
-                Upload
+                上傳
               </button>
             </>
           )}
           {feedbackMsg}
         </form>
         <div className="divider" />
-        <h1>This day, through your eyes.</h1>
-        {isLoading && <p>Fetching images...This might take a while...</p>}
+        <h1>你的眼中的這一天...</h1>
+        {isLoading && <p>照片下載中，請稍等一下囉...</p>}
         {data && <PhotoCollection galleryID="my-test-gallery" images={data} />}
       </section>
     </Layout>

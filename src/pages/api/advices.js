@@ -13,7 +13,7 @@ export default async function adviceHandler(req, res) {
     const [listOfCards] = await listCards(entity);
     res.status(200).json(listOfCards);
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.status(500).json({ err: error });
   }
 }

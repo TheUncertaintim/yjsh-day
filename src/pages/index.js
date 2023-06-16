@@ -2,7 +2,7 @@ import Layout from "../components/layout";
 import styles from "@/styles/Home.module.css";
 import bgImageNormal from "../../public/images/background-image-570px.png";
 import bgImageSmall from "../../public/images/background-image-285px.png";
-import a1Signage from "../../public/images/A1signage_web v3.png";
+import a1Signage from "../../public/images/A1signage_TW_18June.png";
 
 function LandingImage() {
   return (
