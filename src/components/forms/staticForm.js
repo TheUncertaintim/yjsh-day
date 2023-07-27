@@ -5,7 +5,7 @@ import style from "../../styles/form.module.css";
 
 export default function StaticForm({ msg }) {
   // get the image of the interactive card that should be displayed
-  const imagePath = getImagePathByCategory(msg.category, msg.lang);
+  const imagePath = getImagePathByCategory(msg.category);
 
   // dynamic style
   let dynamicStyle = style.cardBase;

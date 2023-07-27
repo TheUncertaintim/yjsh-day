@@ -22,7 +22,6 @@ export default function EditableForm({ formCategory }) {
   // TODO: perhaps use FormData here instead?
   const [msg, setMsg] = useState({
     category: formCategory,
-    lang: "ch",
   });
 
   function handleInput(msg) {
@@ -41,7 +40,7 @@ export default function EditableForm({ formCategory }) {
   // the field is empty if there's only one key (category) in the "msg" instance
   const isFieldEmpty = Object.keys(msg).length === 1;
   // get the image of the interactive card that should be displayed
-  const imagePath = getImagePathByCategory(msg.category, msg.lang);
+  const imagePath = getImagePathByCategory(msg.category);
 
   // dynamic style
   let dynamicStyle = style.cardBase;
@@ -68,19 +67,24 @@ export default function EditableForm({ formCategory }) {
             className={style.submitButton}
             disabled={isFieldEmpty}
           >
-            上傳我的小卡
+            CLICK TO SUBMIT
           </button>
         </>
       );
     }
     case "sending": {
-      return <label>小卡上傳中...</label>;
+      return <label>Sending your advice...</label>;
     }
     case "sent": {
-      return <label>謝謝你的卡片!</label>;
+      return <label>Thank you for your advice!</label>;
     }
     case "error": {
-      return <label>噢...你的卡片似乎傳不上去。改寫實體卡片？</label>;
+      return (
+        <label>
+          Oops...! Your message did not go through. Try the physical card
+          instead?
+        </label>
+      );
     }
   }
 }

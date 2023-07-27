@@ -12,6 +12,7 @@ export default function MessageEntry({ msg, handleEntry, editable }) {
         handleEntry(newEntry);
       }
     : null;
+  // TODO restrict input chars
   if (msg.category === "Advice") {
     return (
       <AdviceEntry
@@ -38,27 +39,13 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
    * note that the "onChange" iattribute handled dynamically, depending on
    * whether onInputChange is explicitly defined.
    */
-  let placeholder;
-  if (msg.lang === "ch") {
-    placeholder = {
-      always: "...記得準備驚喜?",
-      never: "...帶著怒氣入睡?",
-      sometimes: "...給自己一點空間?",
-    };
-  } else {
-    placeholder = {
-      always: "...water your plant",
-      never: "...sleepwalking?",
-      sometimes: "...find your ME time",
-    };
-  }
   return (
     <>
       <TextInput
         name="_1_alwaysText"
         msg={msg}
         maxLength="70"
-        placeholder={editable && placeholder.always}
+        placeholder="...water your plant?"
         className={`${style.input} ${style.alwaysText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -67,7 +54,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         name="_2_neverText"
         msg={msg}
         maxLength="70"
-        placeholder={editable && placeholder.never}
+        placeholder="...sleepwalking?"
         className={`${style.input} ${style.neverText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -76,7 +63,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         name="_3_sometimesText"
         msg={msg}
         maxLength="70"
-        placeholder={editable && placeholder.sometimes}
+        placeholder="...find your ME time?"
         className={`${style.input} ${style.sometimesText}`}
         onInputChange={onInputChange}
         disabled={!editable}
@@ -108,7 +95,7 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
           name="_7_blankInput"
           msg={msg}
           maxLength="15"
-          placeholder="...?"
+          placeholder="...or?"
           className={`${style.input} ${style.blankInput}`}
           onInputChange={onInputChange}
           disabled={!editable}
@@ -167,7 +154,7 @@ function TextAreaEntry({ msg, style, onInputChange = null, editable }) {
     <textarea
       name="message"
       value={msg["textArea"] ?? ""}
-      placeholder="我跟你說阿..."
+      placeholder="Long story short..."
       maxLength="350"
       {...(onInputChange && {
         onChange: (e) => onInputChange({ textArea: e.target.value }),

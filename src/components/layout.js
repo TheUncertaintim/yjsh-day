@@ -8,7 +8,7 @@ export default function Layout({ children }) {
   return (
     <>
       <Head>
-        <title>Yu-Jeng & Shao Hui&apos;s day</title>
+        <title>Interactive Marriage Advice Card</title>
         <meta
           name="description"
           content="An interactive website for the wedding guests sending their wishes and memories to the newlyweds"
@@ -20,7 +20,7 @@ export default function Layout({ children }) {
       <main>
         {isPageWide && (
           <>
-            <div className={style.leftTitle}>YU-JENG & SHAO HUI</div>
+            <div className={style.leftTitle}>YU-JENG & SHAOHUI</div>
             <div className={style.rightTitle}>
               CELEBRATING LOVE, LIFE, KIN/FRIENDSHIPS
             </div>

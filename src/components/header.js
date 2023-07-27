@@ -1,7 +1,7 @@
 import Link from "next/link";
 import style from "../styles/header.module.css";
-import logoNormal from "/public/images/wedding-logo-ch.png";
-import logoSmall from "/public/images/wedding-logo-ch-small.png";
+import logoNormal from "/public/images/wedding-logo.png";
+import logoSmall from "/public/images/wedding-logo-small.png";
 
 export default function Header() {
   let logo = (
@@ -17,8 +17,8 @@ export default function Header() {
     <header>
       <Link href="/">{logo}</Link>
       <nav className={style.navItems}>
-        <Link href="/tellus">互動小卡</Link>
-        <Link href="/photos">相片集</Link>
+        <Link href="/tellus">TELL US</Link>
+        <Link href="/photos">PHOTOS</Link>
       </nav>
     </header>
   );
