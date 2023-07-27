@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Header from "./header";
+import Footer from "./footer";
 import style from "../styles/layout.module.css";
 import { useMediaQuery } from "@/lib/customHooks";
 
@@ -28,6 +29,7 @@ export default function Layout({ children }) {
         )}
         <div className={style.pageLayout}>{children}</div>
       </main>
+      <Footer />
     </>
   );
 }

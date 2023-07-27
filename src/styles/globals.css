@@ -78,6 +78,10 @@ body {
   min-height: 100vh;
 }
  
+a {
+  color: white;
+}
+
 /* TODO: replace this with <hr> */
 .divider {
   margin-top: 2rem;
