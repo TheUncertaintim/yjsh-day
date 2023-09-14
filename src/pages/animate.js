@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import DisplayableCard from "@/components/DisplayableCard";
+import DisplayableCard from "@/components/displayable-card";
 import { getAnimationBackgroundByCategory } from "@/components/forms/utils";
 import useSWR, { mutate } from "swr";
 

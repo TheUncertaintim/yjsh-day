@@ -1,4 +1,4 @@
-import MessageEntry from "../messageEntry";
+import MessageEntry from "../message-entry";
 import { getImagePathByCategory } from "./utils";
 
 import style from "../../styles/form.module.css";

@@ -1,4 +1,4 @@
-import { generateUploadURL } from "@/lib/cloudstorage";
+import { generateUploadURL } from "@/lib/cloud-storage";
 
 export default async function uploadHandler(req, res) {
   const fileName = req.query.file;

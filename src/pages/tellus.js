@@ -1,8 +1,8 @@
 import style from "../styles/tellus.module.css";
 import { useState } from "react";
 import Layout from "../components/layout";
-import EditableForm from "@/components/forms/editableForm";
-import StaticForm from "@/components/forms/staticForm";
+import EditableForm from "@/components/forms/editable-form";
+import StaticForm from "@/components/forms/static-form";
 import useSWR from "swr";
 
 export default function TellUs() {

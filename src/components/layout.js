@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header from "./header";
 import Footer from "./footer";
 import style from "../styles/layout.module.css";
-import { useMediaQuery } from "@/lib/customHooks";
+import { useMediaQuery } from "@/lib/custom-hooks";
 
 export default function Layout({ children }) {
   let isPageWide = useMediaQuery("(min-width: 600px)");
