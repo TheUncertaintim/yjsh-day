@@ -23,7 +23,7 @@ export default function TellUs() {
   }
 
   return (
-    <Layout>
+    <>
       <section>
         <p>Give us some advice, choose different cards:</p>
         <fieldset className={style.optionContainer}>
@@ -48,7 +48,7 @@ export default function TellUs() {
       {isLoading && <label>Loading other people&apos;s suggestions</label>}
       {data &&
         data.map((advice, index) => <StaticForm key={index} msg={advice} />)}
-    </Layout>
+    </>
   );
 }
 

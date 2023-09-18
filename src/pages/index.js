@@ -20,9 +20,5 @@ function LandingImage() {
 }
 
 export default function Home() {
-  return (
-    <Layout>
-      <LandingImage />
-    </Layout>
-  );
+  return <LandingImage />;
 }

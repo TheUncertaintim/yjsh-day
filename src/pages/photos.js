@@ -96,54 +96,52 @@ export default function Photos() {
   }
 
   return (
-    <Layout>
-      <section>
-        <p>
-          Yu-Jeng doesn’t have Instagram, therefore there is no “Wedding
-          Hashtag”, so I (Shao Hui) can’t ask you to tag us on Instagram.
-        </p>
-        <p>
-          INSTEAD! Share with us your perspective of the day - Photos of you,
-          photos of us, memories of this day to last a lifetime.
-        </p>
-        <form className={style.shareImageform}>
-          <div>
-            <label htmlFor="image-upload" className={style.filePickerLabel}>
-              SELECT A PHOTO
-            </label>
-            <input
-              id="image-upload"
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleInputSelection}
-              className={style.filePicker}
+    <section>
+      <p>
+        Yu-Jeng doesn’t have Instagram, therefore there is no “Wedding Hashtag”,
+        so I (Shao Hui) can’t ask you to tag us on Instagram.
+      </p>
+      <p>
+        INSTEAD! Share with us your perspective of the day - Photos of you,
+        photos of us, memories of this day to last a lifetime.
+      </p>
+      <form className={style.shareImageform}>
+        <div>
+          <label htmlFor="image-upload" className={style.filePickerLabel}>
+            SELECT A PHOTO
+          </label>
+          <input
+            id="image-upload"
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleInputSelection}
+            className={style.filePicker}
+          />
+        </div>
+        {fileSelected && (
+          <>
+            <img
+              src={URL.createObjectURL(fileSelected)}
+              alt="image to upload"
+              className={style.uploadedImage}
             />
-          </div>
-          {fileSelected && (
-            <>
-              <img
-                src={URL.createObjectURL(fileSelected)}
-                alt="image to upload"
-                className={style.uploadedImage}
-              />
-              <button
-                type="submit"
-                className={style.shareButton}
-                onClick={(e) => handleSubmit(e, fileSelected, updateFormState)}
-              >
-                Upload
-              </button>
-            </>
-          )}
-          {feedbackMsg}
-        </form>
-        <div className="divider" />
-        <h1>This day, through your eyes.</h1>
-        {isLoading && <p>Fetching images...This might take a while...</p>}
-        {data && <PhotoCollection galleryID="my-test-gallery" images={data} />}
-      </section>
-    </Layout>
+            <button
+              type="submit"
+              className={style.shareButton}
+              onClick={(e) => handleSubmit(e, fileSelected, updateFormState)}
+            >
+              Upload
+            </button>
+          </>
+        )}
+        {feedbackMsg}
+      </form>
+      <div className="divider" />
+      <h1>This day, through your eyes.</h1>
+      {isLoading && <p>Fetching images...This might take a while...</p>}
+      {data && <PhotoCollection galleryID="my-test-gallery" images={data} />}
+    </section>
   );
 }
 
