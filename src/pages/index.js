@@ -1,21 +1,16 @@
 import Image from "next/image";
-import styles from "@/styles/Home.module.css";
-import background from "../../public/images/a1-signage-web-v3.png";
+import background from "/public/images/en/landing-image-en.png";
 
-function LandingImage() {
+export default function LandingImage() {
   return (
-    <div id={styles.container}>
-      <Image
-        src={background}
-        width={1000}
-        height={600}
-        alt="A logo with date of the wedding"
-        style={{ maxWidth: "100%", margin: "5vh auto" }}
-      />
-    </div>
+    <Image
+      src={background}
+      alt="A logo with date of the wedding"
+      style={{
+        maxWidth: "100%",
+        height: "auto",
+        margin: "0 auto",
+      }}
+    />
   );
-}
-
-export default function Home() {
-  return <LandingImage />;
 }

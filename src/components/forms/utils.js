@@ -1,14 +1,14 @@
-import cardAdvice from "/public/images/advice_card_advice.png";
-import cardPredict from "/public/images/advice_card_predict.png";
-import cardShare from "/public/images/advice_card_share.png";
-import cardSuggest from "/public/images/advice_card_suggest.png";
-import cardTell from "/public/images/advice_card_tell.png";
+import cardAdvice from "/public/images/en/advice_card_advice.png";
+import cardPredict from "/public/images/en/advice_card_predict.png";
+import cardShare from "/public/images/en/advice_card_share.png";
+import cardSuggest from "/public/images/en/advice_card_suggest.png";
+import cardTell from "/public/images/en/advice_card_tell.png";
 
-import animateCardAdvice from "/public/images/animate_advice EN.png";
-import animateCardPredict from "/public/images/animate_Predict EN.png";
-import animateCardShare from "/public/images/animate_Share EN.png";
-import animateCardSuggest from "/public/images/animate_Suggest EN.png";
-import animateCardTell from "/public/images/animate_Tell EN.png";
+import animateCardAdvice from "/public/images/en/animate_advice EN.png";
+import animateCardPredict from "/public/images/en/animate_Predict EN.png";
+import animateCardShare from "/public/images/en/animate_Share EN.png";
+import animateCardSuggest from "/public/images/en/animate_Suggest EN.png";
+import animateCardTell from "/public/images/en/animate_Tell EN.png";
 
 export function getImagePathByCategory(category) {
   switch (category) {
