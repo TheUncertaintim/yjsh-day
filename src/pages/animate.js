@@ -15,6 +15,8 @@ if (typeof window !== "undefined") {
   ctx.strokeStyle = ctx.fillStyle = "#8C0303";
   console.log("Done setting up canvas font and style");
 }
+// fetching available forms from the cloud
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Animate() {
   // referencing the canvas
@@ -23,12 +25,7 @@ export default function Animate() {
   // the idx of the advice card that's on display
   const [cardIdx, setCardIdx] = useState(0);
 
-  // fetching available forms from the cloud
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(
-    "/api/advices?entity=Card",
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR("/api/card", fetcher);
 
   // render 2d graphics upon mounting
   useEffect(() => {
@@ -58,7 +55,7 @@ export default function Animate() {
       } else {
         console.log("Reaching the last card. Starting over again.");
         // pull the changes again and start from the first
-        mutate("/api/advices?entity=Card");
+        mutate("/api/card");
         setTimeout(() => setCardIdx(0), 1000);
       }
     }

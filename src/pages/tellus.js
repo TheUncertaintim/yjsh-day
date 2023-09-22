@@ -1,22 +1,18 @@
 import style from "../styles/tellus.module.css";
 import { useState } from "react";
-import Layout from "../components/layout";
-import EditableForm from "@/components/forms/editable-form";
-import StaticForm from "@/components/forms/static-form";
 import useSWR from "swr";
+import StaticForm from "@/components/forms/static-form";
+import EditableForm from "@/components/forms/editable-form";
+
+// fetcher for swr
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function TellUs() {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(
-    "/api/advices?entity=Card",
-    fetcher
-  );
-  const [activeCard, setActiveCard] = useState("Advice");
+  // all kinds of cards to be filled
+  const cardOptions = ["Advice", "Share", "Suggest", "Tell", "Predict"];
 
-  if (error) {
-    // TODO: handle error!!!
-    console.log("error: ", error);
-  }
+  // "Advice" card is selected by default
+  const [activeCard, setActiveCard] = useState("Advice");
 
   function handleClick(cardClicked) {
     setActiveCard(cardClicked);
@@ -24,47 +20,57 @@ export default function TellUs() {
 
   return (
     <>
-      <section>
-        <p>Give us some advice, choose different cards:</p>
-        <fieldset className={style.optionContainer}>
+      <h1>Select any card below, give us some advice</h1>
+      <fieldset className={style.optionContainer}>
+        {cardOptions.map((option) => (
           <CardOption
-            optionName="Advice"
-            handleClick={handleClick}
-            defaultChecked
-          />
-          |
-          <CardOption optionName="Share" handleClick={handleClick} />
-          |
-          <CardOption optionName="Suggest" handleClick={handleClick} />
-          |
-          <CardOption optionName="Tell" handleClick={handleClick} />
-          |
-          <CardOption optionName="Predict" handleClick={handleClick} />
-        </fieldset>
-        <EditableForm key={activeCard} formCategory={activeCard} />
-        <div className="divider" />
-        <p>Read more from our friends and family:</p>
-      </section>
-      {isLoading && <label>Loading other people&apos;s suggestions</label>}
-      {data &&
-        data.map((advice, index) => <StaticForm key={index} msg={advice} />)}
+            key={option}
+            activeCard={activeCard}
+            onClick={handleClick}
+          >
+            {option}
+          </CardOption>
+        ))}
+      </fieldset>
+      <EditableForm key={activeCard} formCategory={activeCard} />
+      <hr />
+      <h1>Read more from our friends and family:</h1>
+      <CardsDisplay />
     </>
   );
 }
 
-function CardOption({ optionName, handleClick, defaultChecked }) {
+function CardOption({ activeCard, onClick, children }) {
+  // add custom style for the selected card option
+  let customStyle = activeCard === children ? { fontWeight: "bold" } : {};
+
   return (
     <label
+      style={customStyle}
       className={style.optionLabel}
-      onClick={() => handleClick(optionName)}
+      onClick={() => onClick(children)}
     >
-      <input
-        type="radio"
-        name="cardsOption"
-        hidden
-        defaultChecked={defaultChecked}
-      />
-      {optionName}
+      {children}
     </label>
   );
+}
+
+function CardsDisplay() {
+  const { data, error, isLoading } = useSWR("/api/card", fetcher);
+  if (error) {
+    // TODO: handle error!!!
+    console.log("error: ", error);
+  }
+
+  if (data && data.length == 0) {
+    return <p>Want to be the first one to give your advice?</p>;
+  } else {
+    return (
+      <>
+        {isLoading && <label>Loading other people&apos;s suggestions</label>}
+        {data &&
+          data.map((advice, index) => <StaticForm key={index} msg={advice} />)}
+      </>
+    );
+  }
 }

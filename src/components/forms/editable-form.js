@@ -14,7 +14,7 @@ export default function EditableForm({ formCategory }) {
     setFormState(state);
     // pull the forms again after user submitted a new form
     if (state === "sent") {
-      mutate("/api/advices?entity=Card");
+      mutate("/api/card");
     }
   }
 
@@ -100,7 +100,7 @@ async function handleSubmit(event, msgData, updateForm) {
   const JSONdata = JSON.stringify(msgData);
 
   // API endpoint where we send form data.
-  const endpoint = "/api/form";
+  const endpoint = "/api/card";
 
   // Form the request for sending data to the server.
   const options = {
