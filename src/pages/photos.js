@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import Layout from "../components/layout";
 import style from "../styles/photos.module.css";
+import Image from "next/image";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 
@@ -20,6 +20,7 @@ function PhotoCollection(props) {
       lightbox = null;
     };
   }, []);
+
   return (
     <div className={style.photoContainer} id={props.galleryID}>
       {props.images.map((image, index) => (
@@ -40,10 +41,7 @@ function PhotoCollection(props) {
 
 export default function Photos() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(
-    "/api/advices?entity=ImageSummary",
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR("/api/photo", fetcher);
 
   if (error) {
     console.error("Error loading photos...", error);
@@ -121,7 +119,7 @@ export default function Photos() {
         </div>
         {fileSelected && (
           <>
-            <img
+            <Image
               src={URL.createObjectURL(fileSelected)}
               alt="image to upload"
               className={style.uploadedImage}
@@ -150,7 +148,7 @@ async function handleSubmit(event, fileSelected, updateFormState) {
   event.preventDefault();
 
   const filename = encodeURIComponent(fileSelected.name);
-  const endpoint = "/api/gcs-upload-url";
+  const endpoint = "/api/photo";
   const res = await fetch(`${endpoint}?file=${filename}`);
   const { url, fields } = await res.json();
 

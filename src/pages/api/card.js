@@ -1,4 +1,4 @@
-import { addCard, listCards } from "@/lib/datastore";
+import { addCard, getCards } from "@/lib/datastore";
 
 export default async function adviceHandler(req, res) {
   // handle only GET and POST request
@@ -6,7 +6,7 @@ export default async function adviceHandler(req, res) {
     case "GET":
       try {
         // pull cards from google cloud
-        const [listOfCards] = await listCards();
+        const [listOfCards] = await getCards();
         res.status(200).json(listOfCards);
       } catch (error) {
         console.log(error);
@@ -14,10 +14,8 @@ export default async function adviceHandler(req, res) {
       }
       break;
     case "POST":
-      const cardData = req.body;
-      // TODO: server input validation here
-
       // upload msg to google cloud
+      const cardData = req.body;
       try {
         const data = await addCard(cardData);
         const apiResponse = data[0];

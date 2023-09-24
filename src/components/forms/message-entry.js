@@ -1,6 +1,8 @@
-import style from "../styles/messageEntry.module.css";
+import style from "@/styles/messageEntry.module.css";
+import { useContext } from "react";
+import { EditableContext } from "./form-context";
 
-export default function MessageEntry({ msg, handleEntry, editable }) {
+export default function MessageEntry({ category, msg, handleEntry }) {
   const onInputChange = handleEntry
     ? (change) => {
         // compose new entry instance
@@ -12,29 +14,15 @@ export default function MessageEntry({ msg, handleEntry, editable }) {
         handleEntry(newEntry);
       }
     : null;
-  // TODO restrict input chars
-  if (msg.category === "Advice") {
-    return (
-      <AdviceEntry
-        msg={msg}
-        style={style}
-        onInputChange={onInputChange}
-        editable={editable}
-      />
-    );
+
+  if (category === "Advice") {
+    return <MultiEntry msg={msg} onInputChange={onInputChange} />;
   } else {
-    return (
-      <TextAreaEntry
-        msg={msg}
-        style={style}
-        onInputChange={onInputChange}
-        editable={editable}
-      />
-    );
+    return <SingleEntry msg={msg} onInputChange={onInputChange} />;
   }
 }
 
-function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
+function MultiEntry({ msg, onInputChange }) {
   /**
    * note that the "onChange" iattribute handled dynamically, depending on
    * whether onInputChange is explicitly defined.
@@ -48,7 +36,6 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         placeholder="...water your plant?"
         className={`${style.input} ${style.alwaysText}`}
         onInputChange={onInputChange}
-        disabled={!editable}
       />
       <TextInput
         name="_2_neverText"
@@ -57,7 +44,6 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         placeholder="...sleepwalking?"
         className={`${style.input} ${style.neverText}`}
         onInputChange={onInputChange}
-        disabled={!editable}
       />
       <TextInput
         name="_3_sometimesText"
@@ -66,7 +52,6 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         placeholder="...find your ME time?"
         className={`${style.input} ${style.sometimesText}`}
         onInputChange={onInputChange}
-        disabled={!editable}
       />
       <div className={style.checkBoxes}>
         <div className={style.jokingOption}>
@@ -74,7 +59,6 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
             name="_4_jokingBox"
             msg={msg}
             onInputChange={onInputChange}
-            disabled={!editable}
           />
         </div>
         <div className={style.trustMeOption}>
@@ -82,14 +66,12 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
             name="_5_trustMeBox"
             msg={msg}
             onInputChange={onInputChange}
-            disabled={!editable}
           />
         </div>
         <CheckBoxInput
           name="_6_blankBox"
           msg={msg}
           onInputChange={onInputChange}
-          disabled={!editable}
         />
         <TextInput
           name="_7_blankInput"
@@ -98,7 +80,6 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
           placeholder="...or?"
           className={`${style.input} ${style.blankInput}`}
           onInputChange={onInputChange}
-          disabled={!editable}
         />
       </div>
       <TextInput
@@ -107,13 +88,14 @@ function AdviceEntry({ msg, style, onInputChange = null, editable = false }) {
         maxLength="15"
         className={`${style.input} ${style.signedByText}`}
         onInputChange={onInputChange}
-        disabled={!editable}
       />
     </>
   );
 }
 
 function TextInput(prop) {
+  const isEditable = useContext(EditableContext);
+
   return (
     <input
       type="text"
@@ -121,46 +103,39 @@ function TextInput(prop) {
       value={prop.msg[prop.name] ?? ""}
       placeholder={prop.placeholder}
       maxLength={prop.maxLength}
-      {...(prop.onInputChange && {
-        onChange: (e) => prop.onInputChange({ [prop.name]: e.target.value }),
-      })}
+      onChange={(e) => prop.onInputChange({ [prop.name]: e.target.value })}
       className={prop.className}
-      disabled={prop.disabled}
+      disabled={!isEditable}
     />
   );
 }
 
-function CheckBoxInput({ name, msg, onInputChange, className, disabled }) {
+function CheckBoxInput({ name, msg, onInputChange }) {
+  const isEditable = useContext(EditableContext);
+
   return (
     <input
       type="checkbox"
       name={name}
       checked={msg[name] ?? false}
-      {...(onInputChange && {
-        onChange: (e) => onInputChange({ [name]: e.target.checked }),
-      })}
-      className={className ?? ""}
-      disabled={disabled}
+      onChange={(e) => onInputChange({ [name]: e.target.checked })}
+      disabled={!isEditable}
     />
   );
 }
 
-function TextAreaEntry({ msg, style, onInputChange = null, editable }) {
-  /**
-   * note that the "onChange" iattribute handled dynamically, depending on
-   * whether onInputChange is explicitly defined.
-   */
+function SingleEntry({ msg, onInputChange }) {
+  const isEditable = useContext(EditableContext);
+
   return (
     <textarea
       name="message"
       value={msg["textArea"] ?? ""}
       placeholder="Long story short..."
       maxLength="350"
-      {...(onInputChange && {
-        onChange: (e) => onInputChange({ textArea: e.target.value }),
-      })}
+      onChange={(e) => onInputChange({ textArea: e.target.value })}
       className={style.formTextArea}
-      disabled={!editable}
+      disabled={!isEditable}
     ></textarea>
   );
 }

@@ -24,13 +24,6 @@ button:enabled {
   cursor: pointer;
 }
 
-button:disabled {
-  border-color: transparent;
-  color: rgb(1, 1, 1, 0.6);
-  cursor: not-allowed;
-
-}
-
 /* || COPIED CODE START */
 /* tricks copied from https://developer.mozilla.org/en-US/docs/Learn/Forms/Advanced_form_styling*/
 input[type="checkbox"] {
@@ -61,6 +54,16 @@ input[type="checkbox"]:checked::before {
 
 /* COPIED CODE END */
 
+input:disabled {
+  border-color: transparent;
+  color: rgb(1, 1, 1, 0.6);
+  cursor: not-allowed;
+}
+
+header {
+  margin-bottom: 4em;
+}
+
 body {
   /* react default settings */
   margin: 0;
@@ -82,10 +85,13 @@ a {
   color: white;
 }
 
-/* TODO: replace this with <hr> */
-.divider {
-  margin-top: 2rem;
-  border-top: 3px solid white;
+h1 {
+  font-size: 120%;
+}
+
+hr {
+  color: white;
+  margin: 2em auto;
 }
 
 canvas {
