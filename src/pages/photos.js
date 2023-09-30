@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import style from "../styles/photos.module.css";
+import style from "@/styles/photos.module.css";
 import Image from "next/image";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";

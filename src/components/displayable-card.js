@@ -1,4 +1,4 @@
-import { getAnimationBackgroundByCategory } from "@/components/forms/utils";
+import { getAnimationBackgroundByCategory } from "@/utils/utils";
 
 // TODO: magin number!!!
 const TEXT_AREA_WIDTH = 35;

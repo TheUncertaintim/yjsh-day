@@ -1,4 +1,4 @@
-import style from "../styles/tellus.module.css";
+import style from "@/styles/tellus.module.css";
 import { useState } from "react";
 import EditableMessage from "@/components/forms/editable-message";
 import MessageBoard from "@/components/forms/message-board";

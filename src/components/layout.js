@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "./header";
 import Footer from "./footer";
-import style from "../styles/layout.module.css";
+import style from "@/styles/layout.module.css";
 import { useMediaQuery } from "@/lib/custom-hooks";
 
 export default function Layout({ children }) {
