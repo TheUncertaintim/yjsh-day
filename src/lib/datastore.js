@@ -1,8 +1,7 @@
 import { Datastore } from "@google-cloud/datastore";
 
-// define constants
-const MESSAGE_ENTITY = "Card";
-const PHOTO_URL_ENTITY = "ImageSummary";
+const MESSAGE_ENTITY = process.env.MESSAGE_ENTITY;
+const PHOTO_URL_ENTITY = process.env.PHOTO_URL_ENTITY;
 
 // Creates a client
 const datastore = new Datastore();

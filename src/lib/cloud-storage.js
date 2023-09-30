@@ -1,7 +1,8 @@
 import { Storage } from "@google-cloud/storage";
 
 const storage = new Storage();
-const BUCKET_NAME = "imac-wedding-images";
+
+const BUCKET_NAME = process.env.BUCKET_NAME;
 
 /** Generate a signed URL for uploading a given file to GCS */
 function generateUploadURL(fileName) {
