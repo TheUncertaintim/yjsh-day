@@ -1,6 +1,6 @@
 import style from "@/styles/messageEntry.module.css";
 import { useContext } from "react";
-import { EditableContext } from "./form-context";
+import EditableContext from "./form-context";
 import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function MessageEntry({ category, msg, handleEntry }) {

@@ -2,7 +2,7 @@ import style from "@/styles/tellus.module.css";
 import { useState } from "react";
 import EditableMessage from "@/components/forms/editable-message";
 import MessageBoard from "@/components/forms/message-board";
-import { EditableContext } from "@/components/forms/form-context";
+import EditableContext from "@/components/forms/form-context";
 import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function TellUs() {

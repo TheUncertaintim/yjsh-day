@@ -6,4 +6,4 @@ const { createContext } = require("react");
  */
 const EditableContext = createContext(true);
 
-export { EditableContext };
+export default EditableContext;
