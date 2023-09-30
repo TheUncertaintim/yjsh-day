@@ -25,7 +25,7 @@ export default function Animate() {
   // the idx of the advice card that's on display
   const [cardIdx, setCardIdx] = useState(0);
 
-  const { data, error, isLoading } = useSWR("/api/card", fetcher);
+  const { data, error, isLoading } = useSWR("/api/cards", fetcher);
 
   // render 2d graphics upon mounting
   useEffect(() => {

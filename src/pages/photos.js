@@ -41,7 +41,7 @@ function PhotoCollection(props) {
 
 export default function Photos() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error, isLoading } = useSWR("/api/photo", fetcher);
+  const { data, error, isLoading } = useSWR("/api/photos", fetcher);
 
   if (error) {
     console.error("Error loading photos...", error);
@@ -148,7 +148,7 @@ async function handleSubmit(event, fileSelected, updateFormState) {
   event.preventDefault();
 
   const filename = encodeURIComponent(fileSelected.name);
-  const endpoint = "/api/photo";
+  const endpoint = "/api/photos";
   const res = await fetch(`${endpoint}?file=${filename}`);
   // TODO: handle if response is not ok
   if (!res.ok) {

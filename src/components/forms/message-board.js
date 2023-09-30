@@ -8,7 +8,7 @@ import { EditableContext } from "./form-context";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function MessageBoard() {
-  const { data, error, isLoading } = useSWR("/api/card", fetcher);
+  const { data, error, isLoading } = useSWR("/api/cards", fetcher);
   if (error) {
     // TODO: handle error!!!
     console.log("error: ", error);
