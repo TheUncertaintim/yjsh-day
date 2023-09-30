@@ -14,16 +14,23 @@ export default async function adviceHandler(req, res) {
       }
       break;
     case "POST":
-      // upload msg to google cloud
-      const cardData = req.body;
-      try {
-        const data = await addCard(cardData);
-        const apiResponse = data[0];
-        res.status(200).json({ data: apiResponse });
-      } catch (err) {
-        console.log("Failed to add new card data due to error:", err);
-        res.status(400).json({ data: err });
-      }
+      // As the project is now archived, submitting new message is no longer possible
+      res.status(405).json({
+        message:
+          "Project is archived. Uploading new message is no longer supported!",
+      });
+
+      // << Before Archive >>
+      // // upload msg to google cloud
+      // const cardData = req.body;
+      // try {
+      //   const data = await addCard(cardData);
+      //   const apiResponse = data[0];
+      //   res.status(200).json({ data: apiResponse });
+      // } catch (err) {
+      //   console.log("Failed to add new card data due to error:", err);
+      //   res.status(400).json({ data: err });
+      // }
       break;
     default:
       console.log(`Method ${req.method} is not allowed.`);

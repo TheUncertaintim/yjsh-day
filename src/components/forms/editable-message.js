@@ -57,6 +57,12 @@ export default function EditableMessage({ msgCategory }) {
       body: JSON.stringify(data),
     });
 
+    // TODO: handle if response is not ok
+    if (!res.ok) {
+      updateForm("error");
+      return;
+    }
+
     const response = await res.json();
     if (!response.ok) {
       updateForm("error");

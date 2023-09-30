@@ -150,6 +150,12 @@ async function handleSubmit(event, fileSelected, updateFormState) {
   const filename = encodeURIComponent(fileSelected.name);
   const endpoint = "/api/photo";
   const res = await fetch(`${endpoint}?file=${filename}`);
+  // TODO: handle if response is not ok
+  if (!res.ok) {
+    updateFormState("error");
+    return;
+  }
+
   const { url, fields } = await res.json();
 
   const newInstance = { ...fields, ...{ file: fileSelected } };
