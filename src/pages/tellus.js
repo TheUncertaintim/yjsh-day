@@ -2,6 +2,7 @@ import style from "@/styles/tellus.module.css";
 import { useState } from "react";
 import EditableMessage from "@/components/forms/editable-message";
 import MessageBoard from "@/components/forms/message-board";
+import { EditableContext } from "@/components/forms/form-context";
 import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function TellUs() {
@@ -33,10 +34,12 @@ export default function TellUs() {
           );
         })}
       </div>
-      {/* a 'key' attribute has to be provided for React to update a new, the EditableMessage is  */}
       <EditableMessage msgCategory={activeCard} />
       <hr />
-      <MessageBoard />
+      {/* Messages displayed are not editable */}
+      <EditableContext.Provider value={false}>
+        <MessageBoard />
+      </EditableContext.Provider>
     </>
   );
 }
