@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import Message from "./message";
+import { MessageDataContext } from "./form-context";
 
 // fetcher for swr
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -33,7 +34,9 @@ export default function MessageBoard() {
       <div>
         <h1>Read more from our friends and family:</h1>
         {data.map((msg, idx) => (
-          <Message key={idx} category={msg.category} msg={msg} />
+          <MessageDataContext.Provider key={idx} value={msg}>
+            <Message category={msg.category} />
+          </MessageDataContext.Provider>
         ))}
       </div>
     );

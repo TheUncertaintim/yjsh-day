@@ -8,13 +8,7 @@ import CARD_CATEGORY from "@/lib/card-categories";
  * It can be used to display messages, or gathering input from the user,
  * in which case handleEntry must be supplied to update the message instance.
  */
-export default function Message({
-  id,
-  category,
-  msg,
-  handleSubmit,
-  handleEntry,
-}) {
+export default function Message({ id, category, handleSubmit }) {
   // get the image of the interactive card that should be displayed
   const imagePath = getImagePathByCategory(category);
 
@@ -33,7 +27,7 @@ export default function Message({
       className={dynamicStyle}
       style={{ backgroundImage: `url(${imagePath}` }}
     >
-      <MessageEntry category={category} msg={msg} handleEntry={handleEntry} />
+      <MessageEntry category={category} />
     </form>
   );
 }

@@ -6,4 +6,15 @@ const { createContext } = require("react");
  */
 const EditableContext = createContext(true);
 
-export default EditableContext;
+/**
+ * Dispatch context helps passing the dispatch function from Reducer deep down
+ * to each input field in a html form.
+ */
+const DispatchContext = createContext();
+
+/**
+ * MessageDataContext helps passing msg deep down to the input fields in a html form
+ */
+const MessageDataContext = createContext();
+
+export { EditableContext, DispatchContext, MessageDataContext };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MessageHandler from "@/components/forms/message-handler";
 import MessageBoard from "@/components/forms/message-board";
-import EditableContext from "@/components/forms/form-context";
+import { EditableContext } from "@/components/forms/form-context";
 import CARD_CATEGORY from "@/lib/card-categories";
 import style from "@/styles/tellus.module.css";
 
