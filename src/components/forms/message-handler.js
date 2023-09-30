@@ -1,15 +1,11 @@
-import { useRef, useState } from "react";
-import MessageEntry from "./message-entry";
-import { getImagePathByCategory } from "@/utils/utils";
-import style from "@/styles/form.module.css";
-
+import { useState } from "react";
 import { useSWRConfig } from "swr";
-import CARD_CATEGORY from "@/lib/card-categories";
+import style from "@/styles/form.module.css";
+import Message from "./message";
 
-export default function EditableMessage({ msgCategory }) {
+export default function MessageHandler({ msgCategory }) {
   // the form state could be either typing, sending or sent
   const [formState, setFormState] = useState("typing");
-  const ref = useRef();
 
   const { mutate } = useSWRConfig();
 
@@ -17,29 +13,19 @@ export default function EditableMessage({ msgCategory }) {
     setFormState(state);
     // pull the forms again after user submitted a new form
     if (state === "sent") {
-      mutate("/api/card");
+      mutate("/api/cards");
     }
   }
 
   // message is represented as an instance
   const [msg, setMsg] = useState({});
 
-  function handleInput(msg) {
+  function onEntry(msg) {
     setMsg(msg);
   }
   //
   const valueStrings = Object.values(msg).join("");
   const isFieldEmpty = valueStrings.replaceAll("false", "").length == 0;
-  // get the image of the interactive card that should be displayed
-  const imagePath = getImagePathByCategory(msgCategory);
-
-  // dynamic style
-  let dynamicStyle;
-  if (msgCategory === CARD_CATEGORY.ADVICE) {
-    dynamicStyle = `${style.cardBase} ${style.adviceCard}`;
-  } else {
-    dynamicStyle = `${style.cardBase} ${style.otherCard}`;
-  }
 
   const onSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
@@ -72,29 +58,25 @@ export default function EditableMessage({ msgCategory }) {
     }
   };
 
+  const formId = "message-form";
+
   switch (formState) {
     case "typing": {
       return (
         <>
-          <form
-            id="editableForm"
-            ref={ref}
-            className={dynamicStyle}
-            onSubmit={onSubmit}
-            style={{ backgroundImage: `url(${imagePath}` }}
-          >
-            <MessageEntry
-              category={msgCategory}
-              msg={msg}
-              handleEntry={handleInput}
-            />
-          </form>
+          <Message
+            id={formId}
+            category={msgCategory}
+            msg={msg}
+            handleSubmit={onSubmit}
+            handleEntry={onEntry}
+          />
           <input
             type="submit"
             className={style.submitButton}
             disabled={isFieldEmpty}
             value={"CLICK TO SUBMIT"}
-            form="editableForm"
+            form={formId}
           />
         </>
       );

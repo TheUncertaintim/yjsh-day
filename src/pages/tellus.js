@@ -1,40 +1,52 @@
-import style from "@/styles/tellus.module.css";
 import { useState } from "react";
-import EditableMessage from "@/components/forms/editable-message";
+import MessageHandler from "@/components/forms/message-handler";
 import MessageBoard from "@/components/forms/message-board";
 import EditableContext from "@/components/forms/form-context";
 import CARD_CATEGORY from "@/lib/card-categories";
+import style from "@/styles/tellus.module.css";
 
 export default function TellUs() {
   // "Advice" card is selected by default
-  const [activeCard, setActiveCard] = useState(CARD_CATEGORY.ADVICE);
+  const [activeCategory, setActiveCategory] = useState(CARD_CATEGORY.ADVICE);
 
   function handleClick(cardClicked) {
-    setActiveCard(cardClicked);
+    setActiveCategory(cardClicked);
   }
 
-  const cardOptions = Object.values(CARD_CATEGORY);
+  // Clickable label to switch card category
+  const CategoryLink = function ({ customStyle, children }) {
+    return (
+      <label
+        key={children}
+        style={customStyle}
+        className={style.categoryLink}
+        onClick={() => handleClick(children)}
+      >
+        {children}
+      </label>
+    );
+  };
+
+  // add font weight for active card category
+  const getCustomStyle = function (category) {
+    return activeCategory === category ? { fontWeight: "bold" } : {};
+  };
 
   return (
     <>
       <h1>Select any card below, give us some advice:</h1>
-      <div className={style.optionContainer}>
-        {cardOptions.map((option) => {
-          // add the font weight if the current card is selected
-          let customStyle = activeCard === option ? { fontWeight: "bold" } : {};
+      <div className={style.linkContainer}>
+        {Object.values(CARD_CATEGORY).map((category) => {
+          // add the font weight if the current card category is selected
+          const customStyle = getCustomStyle(category);
           return (
-            <label
-              key={option}
-              style={customStyle}
-              className={style.optionLabel}
-              onClick={() => handleClick(option)}
-            >
-              {option}
-            </label>
+            <CategoryLink key={category} customStyle={customStyle}>
+              {category}
+            </CategoryLink>
           );
         })}
       </div>
-      <EditableMessage msgCategory={activeCard} />
+      <MessageHandler key={activeCategory} msgCategory={activeCategory} />
       <hr />
       {/* Messages displayed are not editable */}
       <EditableContext.Provider value={false}>
