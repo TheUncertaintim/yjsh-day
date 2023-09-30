@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { getImagePathByCategory } from "./utils";
+import { getImagePathByCategory } from "@/utils/utils";
 import MessageEntry from "./message-entry";
 import style from "@/styles/form.module.css";
 import { EditableContext } from "./form-context";
