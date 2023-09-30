@@ -4,6 +4,7 @@ import { getImagePathByCategory } from "@/utils/utils";
 import style from "@/styles/form.module.css";
 
 import { useSWRConfig } from "swr";
+import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function EditableMessage({ msgCategory }) {
   // the form state could be either typing, sending or sent
@@ -34,7 +35,7 @@ export default function EditableMessage({ msgCategory }) {
 
   // dynamic style
   let dynamicStyle;
-  if (msgCategory === "Advice") {
+  if (msgCategory === CARD_CATEGORY.ADVICE) {
     dynamicStyle = `${style.cardBase} ${style.adviceCard}`;
   } else {
     dynamicStyle = `${style.cardBase} ${style.otherCard}`;

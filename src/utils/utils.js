@@ -10,17 +10,19 @@ import animateCardShare from "/public/images/en/animate_Share EN.png";
 import animateCardSuggest from "/public/images/en/animate_Suggest EN.png";
 import animateCardTell from "/public/images/en/animate_Tell EN.png";
 
+import CARD_CATEGORY from "@/lib/card-categories";
+
 export function getImagePathByCategory(category) {
   switch (category) {
-    case "Advice":
+    case CARD_CATEGORY.ADVICE:
       return cardAdvice.src;
-    case "Suggest":
+    case CARD_CATEGORY.SUGGEST:
       return cardSuggest.src;
-    case "Tell":
+    case CARD_CATEGORY.TELL:
       return cardTell.src;
-    case "Predict":
+    case CARD_CATEGORY.PREDICT:
       return cardPredict.src;
-    case "Share":
+    case CARD_CATEGORY.SHARE:
       return cardShare.src;
     default:
       // TODO: throw an error here
@@ -30,15 +32,15 @@ export function getImagePathByCategory(category) {
 
 export function getAnimationBackgroundByCategory(category) {
   switch (category) {
-    case "Advice":
+    case CARD_CATEGORY.ADVICE:
       return animateCardAdvice.src;
-    case "Suggest":
+    case CARD_CATEGORY.SUGGEST:
       return animateCardSuggest.src;
-    case "Tell":
+    case CARD_CATEGORY.TELL:
       return animateCardTell.src;
-    case "Predict":
+    case CARD_CATEGORY.PREDICT:
       return animateCardPredict.src;
-    case "Share":
+    case CARD_CATEGORY.SHARE:
       return animateCardShare.src;
     default:
       // TODO: throw an error here

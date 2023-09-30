@@ -1,6 +1,7 @@
 import style from "@/styles/messageEntry.module.css";
 import { useContext } from "react";
 import { EditableContext } from "./form-context";
+import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function MessageEntry({ category, msg, handleEntry }) {
   const onInputChange = handleEntry
@@ -15,7 +16,7 @@ export default function MessageEntry({ category, msg, handleEntry }) {
       }
     : null;
 
-  if (category === "Advice") {
+  if (category === CARD_CATEGORY.ADVICE) {
     return <MultiEntry msg={msg} onInputChange={onInputChange} />;
   } else {
     return <SingleEntry msg={msg} onInputChange={onInputChange} />;

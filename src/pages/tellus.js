@@ -2,17 +2,17 @@ import style from "@/styles/tellus.module.css";
 import { useState } from "react";
 import EditableMessage from "@/components/forms/editable-message";
 import MessageBoard from "@/components/forms/message-board";
+import CARD_CATEGORY from "@/lib/card-categories";
 
 export default function TellUs() {
-  // all kinds of cards to be filled
-  const cardOptions = ["Advice", "Share", "Suggest", "Tell", "Predict"];
-
   // "Advice" card is selected by default
-  const [activeCard, setActiveCard] = useState("Advice");
+  const [activeCard, setActiveCard] = useState(CARD_CATEGORY.ADVICE);
 
   function handleClick(cardClicked) {
     setActiveCard(cardClicked);
   }
+
+  const cardOptions = Object.values(CARD_CATEGORY);
 
   return (
     <>
