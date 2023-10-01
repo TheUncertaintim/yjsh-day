@@ -8,7 +8,7 @@ export default function LandingImage() {
   // For this reason we're using traditional <img> tag here
   return (
     <img
-      srcset={`${landingImgSmall.src} 400w, ${landingImgNormal.src} 800w`}
+      srcSet={`${landingImgSmall.src} 400w, ${landingImgNormal.src} 800w`}
       sizes="(max-width: 600px) 400px, 800px"
       src={landingImgNormal.src}
       alt="A logo with date of the wedding"
