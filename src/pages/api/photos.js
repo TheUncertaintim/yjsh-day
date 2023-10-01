@@ -1,4 +1,5 @@
 import { getImagesUrls } from "@/lib/datastore";
+import { generateUploadURL } from "@/lib/cloud-storage";
 
 export default async function uploadHandler(req, res) {
   if (req.method === "GET") {
@@ -15,18 +16,19 @@ export default async function uploadHandler(req, res) {
     // As the project is now archived, submitting new photo is no longer possible
     res.status(405).json({
       message:
-        "Project is archived. Uploading new photo is no longer supported!",
+        "This website is now archived and no longer accepts new message.\nBut THANK YOU!",
     });
 
     // << Before Archive >>
-    // const fileName = req.query.file;
-    // console.log(`Got ${fileName} for uploading...`);
+    // const body = JSON.parse(req.body);
+    // const filename = body.filename;
+    // console.log(`Got ${filename} for uploading...`);
     // try {
-    //   const [response] = await generateUploadURL(fileName);
+    //   const [response] = await generateUploadURL(filename);
     //   res.status(200).json(response);
     // } catch (error) {
     //   console.error(
-    //     `Failed to upload ${fileName} to GCS due to error\n${error}`
+    //     `Failed to upload ${filename} to GCS due to error\n${error}`
     //   );
     //   res.status(500).json({ err: error });
     // }

@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import Image from "next/image";
 import style from "@/styles/photos.module.css";
 
 const FormState = {
@@ -25,9 +24,6 @@ export default function PhotoHandler() {
 
   function updateFormState(formState) {
     setFormState(formState);
-    if (formState === FormState.Uploaded) {
-      setFileSelected(null);
-    }
   }
 
   if (formState == FormState.Error) {
@@ -43,7 +39,10 @@ export default function PhotoHandler() {
   const isUploaded = formState === FormState.Uploaded;
 
   return (
-    <form className={style.shareImageForm}>
+    <form
+      className={style.shareImageForm}
+      onSubmit={(e) => handleSubmit(e, fileSelected, updateFormState)}
+    >
       <div>
         <label htmlFor="image-upload" className={style.filePickerLabel}>
           SELECT A PHOTO
@@ -67,10 +66,9 @@ export default function PhotoHandler() {
           <button
             type="submit"
             className={style.shareButton}
-            onClick={(e) => handleSubmit(e, fileSelected, updateFormState)}
             disabled={formState === FormState.Uploaded}
           >
-            Upload
+            UPLOAD
           </button>
         </>
       )}
@@ -92,27 +90,38 @@ async function handleSubmit(event, fileSelected, updateFormState) {
 
   const filename = encodeURIComponent(fileSelected.name);
   const endpoint = "/api/photos";
-  const res = await fetch(`${endpoint}?file=${filename}`);
-  if (!res.ok) {
-    updateFormState(FormState.Error);
-    return;
-  }
-
-  // uploading photo to GCS from client
-  const { url, fields } = await res.json();
-  const newInstance = { ...fields, ...{ file: fileSelected } };
-  const formData = new FormData();
-  // create a POST request to be posted to GCS
-  Object.entries(newInstance).forEach(([key, value]) => {
-    formData.append(key, value);
+  const res = await fetch(`${endpoint}`, {
+    method: "POST",
+    body: JSON.stringify({ filename }),
   });
-
-  updateFormState(FormState.Uploading);
-  // Send the form data to our forms API on GCS and get a response.
-  const response = await fetch(url, { method: "POST", body: formData });
-  if (response.ok) {
-    updateFormState(FormState.Uploaded);
+  if (!res.ok) {
+    if (res.status === 405) {
+      alert(
+        "This website is now archived and no longer accepts new photos.\nBut THANK YOU!"
+      );
+      updateFormState(FormState.Ready);
+    } else {
+      updateFormState(FormState.Error);
+    }
   } else {
-    updateFormState(FormState.Error);
+    // uploading photo to GCS from client
+    const { url, fields } = await res.json();
+    console.log("Url:", url);
+    console.log("Fields:", fields);
+    const newInstance = { ...fields, ...{ file: fileSelected } };
+    const formData = new FormData();
+    // create a POST request to be posted to GCS
+    Object.entries(newInstance).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    updateFormState(FormState.Uploading);
+    // Send the form data to our forms API on GCS and get a response.
+    const response = await fetch(url, { method: "POST", body: formData });
+    if (response.ok) {
+      updateFormState(FormState.Uploaded);
+    } else {
+      updateFormState(FormState.Error);
+    }
   }
 }

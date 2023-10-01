@@ -23,7 +23,7 @@ function msgReducer(msg, action) {
 
 // different form state
 const FormState = {
-  Typing: "typing",
+  Ready: "ready",
   Sending: "sending",
   IsSent: "isSent",
   Error: "error",
@@ -32,8 +32,8 @@ const FormState = {
 export default function MessageHandler({ msgCategory }) {
   // initial state is an empty message
   const [msg, dispatch] = useReducer(msgReducer, {});
-  // the form state could be either typing, sending or sent
-  const [formState, setFormState] = useState(FormState.Typing);
+  // the form state could be either ready, sending or sent
+  const [formState, setFormState] = useState(FormState.Ready);
 
   const { mutate } = useSWRConfig();
 
@@ -73,7 +73,14 @@ export default function MessageHandler({ msgCategory }) {
     });
 
     if (!res.ok) {
-      updateForm(FormState.Error);
+      if (res.status === 405) {
+        alert(
+          "This website is now archived and no longer accepts new message.\nBut THANK YOU!"
+        );
+        updateForm(FormState.Ready);
+      } else {
+        updateForm(FormState.Error);
+      }
     } else {
       updateForm(FormState.IsSent);
     }
