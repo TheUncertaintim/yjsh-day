@@ -59,7 +59,7 @@ export default function PhotoHandler() {
       </div>
       {fileSelected && (
         <>
-          <Image
+          <img
             src={URL.createObjectURL(fileSelected)}
             alt="image to upload"
             className={style.uploadedImage}
