@@ -60,10 +60,6 @@ input:disabled {
   cursor: not-allowed;
 }
 
-header {
-  margin-bottom: 4em;
-}
-
 body {
   /* react default settings */
   margin: 0;
