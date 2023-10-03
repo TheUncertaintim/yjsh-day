@@ -93,7 +93,7 @@ export default function MessageHandler({ msgCategory }) {
   return (
     <DispatchContext.Provider value={dispatch}>
       <MessageDataContext.Provider value={msg}>
-        <Message id={formId} category={msgCategory} handleSubmit={onSubmit} />
+        <Message id={formId} category={msgCategory} handleSubmit={onSubmit} withDataTestId={true} />
         <input
           type="submit"
           className={style.submitButton}
