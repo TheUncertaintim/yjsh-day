@@ -13,7 +13,7 @@ export default function Header() {
         <img
           src={headerImage.src}
           alt="ribbon with newlyweds' name"
-          style={{ margin: "2vh auto", maxWidth: "100%" }}
+          style={{ margin: "2vh auto", maxWidth: "70vw" }}
         />
       </Link>
       <nav className={style.navItems}>
