@@ -3,7 +3,7 @@
 This is a digital wedding guestbook I made for my own wedding reception in June 2023 (in Singapore & Taiwan).
 
 ## Current status
-This web app hosted at [yjsh.day](ttps://eighth-server-388223.as.r.appspot.com/) is no longer actively maintained. You are free to poke around, but you won't be able to submit messages and photos to us anymore!
+This web app hosted at [yjsh.day](https://eighth-server-388223.as.r.appspot.com/) is no longer actively maintained. You are free to poke around, but you won't be able to submit messages and photos to us anymore!
 
 ![image](https://github.com/TheUncertaintim/yjsh-day/assets/48164900/62e8e1a3-cb00-4b65-ac3c-42abd61eb573)
 
